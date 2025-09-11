@@ -4,7 +4,7 @@ import NavButton from "./NavButton.vue";
 
 <template>
     <div class="overflow-auto flex-1 flex flex-col gap-4 pe-2">
-        <NavButton to="/home" label="Home" />
+        <NavButton to="/" label="Home" />
         <NavButton to="/about" label="About" />
         <NavButton to="/test1" label="Test1" />
         <NavButton to="/test2" label="Test2" />

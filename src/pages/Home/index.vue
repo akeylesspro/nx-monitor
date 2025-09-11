@@ -12,12 +12,18 @@ const onClick = () => {
     count.value++;
     state.items.push(state.items[state.items.length - 1] + 1);
 };
+const clearList = () => {
+    state.items = [0];
+    count.value = 0;
+};
 </script>
 
 <template>
-    <div class="flex gap-3 flex-col">
-        <button @click="onClick">Clicked {{ count }} (x2 = {{ doubled }})</button>
-        <button @click="state.items = [555]">Clicked 2</button>
+    <div class="flex gap-3 flex-col items-start justify-start h-full flex-wrap">
+        <button class="bg-[var(--color-primary)] text-[var(--color-on-primary)] rounded-md p-2" @click="onClick">Clicked to increase</button>
+        <button class="bg-[var(--color-primary)] text-[var(--color-on-primary)] rounded-md p-2" @click="clearList">Clear List</button>
+        <p>count: {{ count }}</p>
+        <p>count x2: {{ doubled }}</p>
         <div v-for="n in state.items" :key="n">{{ n }}</div>
     </div>
 </template>
