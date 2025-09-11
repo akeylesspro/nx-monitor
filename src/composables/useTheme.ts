@@ -4,22 +4,15 @@ const THEME_OPTIONS = ["system", "light", "dark", "akeyless"] as const;
 export type ThemeMode = (typeof THEME_OPTIONS)[number];
 
 const LOCAL_STORAGE_KEY = "app_theme_mode";
-const storedMode = (): ThemeMode | null => {
-    try {
-        const value = localStorage.getItem(LOCAL_STORAGE_KEY) as ThemeMode;
-        if (THEME_OPTIONS.includes(value)) return value;
-        return null;
-    } catch {
-        return null;
-    }
+
+const getThemeFromLocalStorage = (): ThemeMode => {
+    const value = localStorage.getItem(LOCAL_STORAGE_KEY) as ThemeMode | undefined;
+    if (!value || !THEME_OPTIONS.includes(value)) return "system";
+    return value;
 };
 
-const saveMode = (mode: ThemeMode) => {
-    try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, mode);
-    } catch {
-        // ignore
-    }
+const saveThemeInLocalStorage = (mode: ThemeMode) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, mode);
 };
 
 const applyThemeAttribute = (mode: ThemeMode) => {
@@ -31,44 +24,35 @@ const applyThemeAttribute = (mode: ThemeMode) => {
     root.setAttribute("data-theme", mode);
 };
 
-export const initializeThemeFromStorage = () => {
-    if (typeof document === "undefined") return;
-    const mode = storedMode() ?? "system";
-    applyThemeAttribute(mode);
-};
-
 export const useTheme = () => {
-    const mode = ref<ThemeMode>(storedMode() ?? "system");
+    const theme = ref<ThemeMode>(getThemeFromLocalStorage());
 
-    const isDark = computed<boolean>(() => mode.value === "dark");
+    const isDark = computed<boolean>(() => theme.value === "dark");
 
     const setTheme = (next: ThemeMode) => {
-        mode.value = next;
-        saveMode(next);
+        theme.value = next;
+        saveThemeInLocalStorage(next);
         applyThemeAttribute(next);
-    };
-
-    const cycleTheme = () => {
-        const idx = THEME_OPTIONS.indexOf(mode.value);
-        const next = THEME_OPTIONS[(idx + 1) % THEME_OPTIONS.length];
-        setTheme(next);
     };
 
     onMounted(() => {
-        applyThemeAttribute(mode.value);
+        applyThemeAttribute(theme.value);
         const media = window.matchMedia("(prefers-color-scheme: dark)");
         const handler = () => {
-            if (mode.value === "system") applyThemeAttribute("system");
+            if (theme.value === "system") applyThemeAttribute("system");
         };
         media.addEventListener?.("change", handler);
-        // Fallback for older browsers
-        media.addListener?.(handler);
     });
 
-    watch(mode, (next) => {
-        saveMode(next);
+    watch(theme, (next) => {
+        saveThemeInLocalStorage(next);
         applyThemeAttribute(next);
     });
 
-    return { mode, isDark, setTheme, cycleTheme, THEME_OPTIONS };
+    return { theme, isDark, setTheme, THEME_OPTIONS };
+};
+
+export const initializeThemeFromStorage = () => {
+    if (typeof document === "undefined") return;
+    applyThemeAttribute(getThemeFromLocalStorage());
 };
