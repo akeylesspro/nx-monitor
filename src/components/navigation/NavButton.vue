@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
 import { useRoute } from "vue-router";
-import { cn } from "../../lib/utils";
+import { cn } from "../../helpers";
 
 const props = defineProps<{
     to: string;
