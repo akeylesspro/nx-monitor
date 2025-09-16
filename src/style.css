@@ -1,6 +1,16 @@
 ﻿@import "tailwindcss";
 @plugin "tailwindcss-primeui";
 
+@theme {
+    --breakpoint-3xl: 1920px;
+}
+
+@media (min-width: 1920px) {
+    ._3xl-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+}
+
 ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
@@ -58,7 +68,8 @@
     }
 }
 
-[data-theme="light"] {
+[data-theme="light"],
+[data-theme="Light"] {
     --color-bg: #ffffff;
     --color-surface: #f8fafc;
     --color-text: #0f172a;
@@ -70,7 +81,8 @@
     --color-secondary: #25deeb;
 }
 
-[data-theme="dark"] {
+[data-theme="dark"],
+[data-theme="Dark"] {
     --color-bg: #0b1220;
     --color-surface: #111827;
     --color-text: #e5e7eb;
@@ -82,7 +94,8 @@
     --color-secondary: #eb392c;
 }
 
-[data-theme="akeyless"] {
+[data-theme="akeyless"],
+[data-theme="Akeyless"] {
     --color-bg: #0c1424;
     --color-surface: #121e36;
     --color-text: #e6edf7;

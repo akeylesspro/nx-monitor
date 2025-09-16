@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ThemeSwitcher } from "../../theme";
 import { toRefs } from "vue";
+import ThemeSwitcher from "../ThemeSwitcher.vue";
 
 const props = defineProps<{
     class?: string;

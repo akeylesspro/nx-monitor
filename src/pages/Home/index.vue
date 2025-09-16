@@ -66,45 +66,45 @@ const chartData = {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 max-h-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 _3xl-grid gap-6 md:w-fit max-h-full">
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :type="'bar'" :data="chartData" title="Traffic" class="h-full w-full" />
+                <Chart :data="chartData" title="Traffic" />
             </template>
         </ItemContainer>
     </div>

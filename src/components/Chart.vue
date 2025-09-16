@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
 import PrimeChart from "primevue/chart";
-import { useThemeColors } from "../theme";
+import { useSettingsStore } from "../stores/settings";
 
 type ChartType = "line" | "bar" | "doughnut" | "pie" | "radar" | "polarArea" | "bubble" | "scatter";
 interface ChartProps {
-    type: ChartType;
+    type?: ChartType;
     data: Record<string, unknown>;
     title?: string;
     height?: number | string;
@@ -14,7 +14,7 @@ interface ChartProps {
 const props = defineProps<ChartProps>();
 
 const { type, data } = toRefs(props);
-const themeColors = useThemeColors();
+const { themeColors } = toRefs(useSettingsStore());
 
 const gridColor = computed(() => {
     const color = themeColors.value.textColor;
@@ -57,12 +57,11 @@ const themedData = computed(() => {
     const base: any = data.value as any;
     if (!base || typeof base !== "object") return base;
     const primary = themeColors.value.primaryColor;
-    const primaryTransparent = themeColors.value.primaryColor;
 
     const themedDatasets = (base.datasets ?? []).map((ds: any) => ({
         ...ds,
         borderColor: ds?.borderColor ?? primary,
-        backgroundColor: ds?.backgroundColor ?? primaryTransparent,
+        backgroundColor: ds?.backgroundColor ?? primary,
         hoverBackgroundColor: ds?.hoverBackgroundColor ?? themeColors.value.secondaryColor,
     }));
 
@@ -71,5 +70,5 @@ const themedData = computed(() => {
 </script>
 
 <template>
-    <PrimeChart :type="type" :data="themedData" :options="options" class="h-full w-full overflow-auto" />
+    <PrimeChart :type="type || 'bar'" :data="themedData" :options="options" class="h-full w-full overflow-auto" />
 </template>
