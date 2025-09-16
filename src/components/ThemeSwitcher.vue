@@ -6,10 +6,10 @@ const options = settings.THEME_OPTIONS.map((option) => ({ value: option, label: 
 </script>
 
 <template>
-    <div class="flex items-center gap-2">
-        <label class="text-sm text-[var(--color-muted)]">Theme</label>
+    <div class="flex justify-center gap-1 flex-col">
+        <label class="text-sm">Theme</label>
         <select
-            class="px-2 pt-1 pb-2 rounded-md border bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-text)]"
+            class="px-1 pb-1 rounded-md border bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-text)]"
             v-model="settings.theme"
         >
             <option v-for="opt in options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>

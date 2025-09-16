@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Chart, ItemContainer } from "../../components";
+import { useI18n } from "vue-i18n";
 
 const mockData = [
     {
@@ -56,55 +57,54 @@ const chartData = {
     labels: mockData.map((item) => item.lable),
     datasets: [
         {
-            label: "Requests2",
+            label: "",
             data: mockData.map((item) => item.value),
-            fill: true,
-            tension: 0.3,
         },
     ],
 };
+const { t } = useI18n();
 </script>
 
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 _3xl-grid gap-6 md:w-fit max-h-full">
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
         <ItemContainer>
             <template #default>
-                <Chart :data="chartData" title="Traffic" />
+                <Chart :data="chartData" :title="t('common.traffic')" />
             </template>
         </ItemContainer>
     </div>

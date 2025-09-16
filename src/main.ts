@@ -7,6 +7,7 @@ import "chart.js/auto";
 import { createPinia } from "pinia";
 import persistedState from "pinia-plugin-persistedstate";
 import { useThemeStore } from "./stores";
+import { setup } from "./i18n";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -16,10 +17,13 @@ app.use(pinia);
 const { initializeTheme } = useThemeStore();
 initializeTheme();
 
+const i18n = setup();
+
 app.use(router);
+app.use(i18n);
 app.use(PrimeVue, {
     unstyled: true,
 });
 app.mount("#app");
 
-export { pinia };
+export { pinia, i18n };

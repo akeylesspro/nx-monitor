@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Buttons, Header, Footer } from ".";
+import { cn } from "../../helpers";
 import { useSettingsStore } from "../../stores";
 import { computed, onMounted, onUnmounted } from "vue";
 
@@ -27,12 +28,17 @@ onUnmounted(() => {
         <Footer />
     </nav>
 
-    <!-- Mobile drawer + backdrop -->
+    <!-- Mobile sidebar -->
     <div class="md:hidden">
-        <div v-show="isOpen" class="fixed inset-0 bg-black/40 z-40" @click="setIsMenuOpen(false)" />
+        <div aria-modal="true" v-show="isOpen" class="fixed inset-0 bg-black/50 z-40" @click="setIsMenuOpen(false)" />
         <nav
-            class="fixed z-50 inset-y-0 left-0 w-48 p-3 flex flex-col gap-4 bg-[var(--color-surface)] border-[var(--color-border)] border-e transform transition-transform duration-300"
-            :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
+            v-show="isOpen"
+            :class="
+                cn(
+                    'fixed z-50 inset-y-0  w-48 p-3 flex flex-col gap-4 bg-[var(--color-surface)] border-[var(--color-border)] border-e ',
+                    settings.isRtl ? 'right-0' : 'left-0'
+                )
+            "
         >
             <Header :isMobile="true" />
             <Buttons />

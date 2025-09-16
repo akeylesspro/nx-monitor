@@ -11,7 +11,7 @@ const props = defineProps<{
 const { class: className, isMobile } = toRefs(props);
 </script>
 <template>
-    <div :class="cn('border-b pb-4 border-[var(--color-border)] flex justify-between items-center gap-4', className)">
+    <div dir="ltr" :class="cn('border-b pb-4 border-[var(--color-border)] flex justify-between items-center gap-4', className)">
         <AkeylessLogo :class="cn(isMobile && `h-8`)" />
         <button v-if="isMobile" class="px-2 py-px rounded-md border" @click="setIsMenuOpen(false)">X</button>
     </div>
