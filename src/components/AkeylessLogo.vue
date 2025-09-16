@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { cn } from "../helpers";
 import { toRefs } from "vue";
-import { useSettingsStore } from "../stores/settings";
+import { useThemeStore } from "../stores";
 
 const props = defineProps<{
     class?: string;
     containerClass?: string;
 }>();
 const { class: className, containerClass } = toRefs(props);
-const settings = useSettingsStore();
+const settings = useThemeStore();
 </script>
 
 <template>

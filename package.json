@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "akeyless-types-commons": "^1.0.61",
     "chart.js": "^4.5.0",
     "clsx": "^2.1.1",
     "pinia": "^3.0.3",

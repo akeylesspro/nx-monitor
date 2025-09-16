@@ -6,14 +6,14 @@ import PrimeVue from "primevue/config";
 import "chart.js/auto";
 import { createPinia } from "pinia";
 import persistedState from "pinia-plugin-persistedstate";
-import { useSettingsStore } from "./stores/settings";
+import { useThemeStore } from "./stores";
 
 const app = createApp(App);
 const pinia = createPinia();
 pinia.use(persistedState);
 app.use(pinia);
 
-const { initializeTheme } = useSettingsStore();
+const { initializeTheme } = useThemeStore();
 initializeTheme();
 
 app.use(router);

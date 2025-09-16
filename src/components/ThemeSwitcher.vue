@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useSettingsStore } from "../stores/settings";
+import { useThemeStore } from "../stores";
 
-const settings = useSettingsStore();
+const settings = useThemeStore();
 const options = settings.THEME_OPTIONS.map((option) => ({ value: option, label: option }));
 </script>
 
