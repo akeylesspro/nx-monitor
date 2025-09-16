@@ -13,14 +13,11 @@ const className = "rounded-md block p-2 w-full h-full bg-[var(--color-muted)] te
 const route = useRoute();
 const isActive = computed(() => route.path === to.value);
 
-const settings = useSettingsStore();
-function onClick() {
-    settings.closeMenu();
-}
+const { setIsMenuOpen } = useSettingsStore();
 </script>
 
 <template>
     <button>
-        <router-link @click="onClick" :class="cn(className, isActive && 'bg-[var(--color-primary)]')" :to="to">{{ label }}</router-link>
+        <router-link @click="setIsMenuOpen(false)" :class="cn(className, isActive && 'bg-[var(--color-primary)]')" :to="to">{{ label }}</router-link>
     </button>
 </template>

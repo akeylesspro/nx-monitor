@@ -1,30 +1,20 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { setState, type SetState } from "./helpers";
 
 export const useSettingsStore = defineStore(
     "settings",
     () => {
         const isMenuOpen = ref(false);
+        const setIsMenuOpen: SetState<boolean> = (value) => setState(isMenuOpen, value);
 
-        function openMenu() {
-            isMenuOpen.value = true;
-        }
-
-        function closeMenu() {
-            isMenuOpen.value = false;
-        }
-
-        function toggleMenu() {
-            isMenuOpen.value = !isMenuOpen.value;
-        }
-
-        return { isMenuOpen, openMenu, closeMenu, toggleMenu };
+        return { isMenuOpen, setIsMenuOpen };
     },
     {
         persist: {
             key: "settings",
             storage: localStorage,
-            pick: [],
+            // pick: [],
         },
     }
 );

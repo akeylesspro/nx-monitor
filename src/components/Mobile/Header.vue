@@ -2,10 +2,7 @@
 import { useSettingsStore } from "../../stores";
 import AkeylessLogo from "../AkeylessLogo.vue";
 
-const settings = useSettingsStore();
-function onToggleMenu() {
-    settings.toggleMenu();
-}
+const { setIsMenuOpen } = useSettingsStore();
 </script>
 
 <template>
@@ -13,7 +10,7 @@ function onToggleMenu() {
         <button
             class="p-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)]"
             aria-label="Toggle menu"
-            @click="onToggleMenu"
+            @click="setIsMenuOpen((prev) => !prev)"
         >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                 <path
