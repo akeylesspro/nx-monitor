@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import Navigation from "./components/navigation/index.vue";
+import { MobileHeader } from "./components/Mobile";
+import { Navigation } from "./components/navigation";
+
 </script>
 
 <template>
-    <div class="h-screen flex bg-[var(--color-bg)] text-[var(--color-text)]">
+    <div class="h-dvh flex bg-[var(--color-bg)] text-[var(--color-text)] md:flex-row flex-col gap-1 md:gap-0">
         <Navigation />
-        <main class="p-6 flex-1 bg-[var(--color-surface)]">
+        <MobileHeader />
+        <main class="p-4 flex-1 bg-[var(--color-surface)] overflow-auto">
             <router-view />
         </main>
     </div>
