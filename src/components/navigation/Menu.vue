@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Buttons, Header, Footer } from ".";
+import { Buttons, Footer } from ".";
 import { cn } from "../../helpers";
 import { useSettingsStore } from "../../stores";
 import { computed, onMounted, onUnmounted } from "vue";
@@ -22,7 +22,7 @@ onUnmounted(() => {
 
 <template>
     <!-- Desktop sidebar -->
-    <nav class="xl:flex hidden p-3 flex-col gap-4 w-64  border-[var(--color-border)] border-e">
+    <nav class="xl:flex hidden p-3 flex-col gap-4 w-64 border-[var(--color-border)] border-e">
         <Buttons />
         <Footer />
     </nav>
