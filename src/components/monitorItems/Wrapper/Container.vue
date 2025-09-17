@@ -37,7 +37,7 @@ const classNames = computed(() => {
 </script>
 
 <template>
-    <div class="h-72 border rounded-md shadow-md p-4 flex flex-col gap-2 text-black" :class="cn(classNames.bg, classNames.border)">
+    <div class="h-72 border rounded-md p-4 flex flex-col gap-2 text-black" :class="cn(classNames.bg, classNames.border)">
         <Title :title="title" :timestamp="timestamp" :classNames="classNames" />
         <slot />
     </div>

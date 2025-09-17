@@ -34,7 +34,7 @@ onUnmounted(() => {
             v-show="isOpen"
             :class="
                 cn(
-                    'fixed z-50 inset-y-0  w-48 p-3 flex flex-col gap-4  border-[var(--color-border)] border-e ',
+                    'fixed z-50 inset-y-0  w-48 p-3 flex flex-col gap-4 bg-[var(--color-bg)] border-[var(--color-border)] border-e ',
                     settings.isRtl ? 'right-0' : 'left-0'
                 )
             "

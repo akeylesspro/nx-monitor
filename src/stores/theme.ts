@@ -23,7 +23,6 @@ export const useThemeStore = defineStore(
             if (theme.value !== "system") {
                 return theme.value;
             }
-            // Check system preference
             if (typeof window === "undefined") return "light";
             return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         });
