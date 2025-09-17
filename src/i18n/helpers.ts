@@ -9,6 +9,7 @@ const messages = {
             about: "About",
             test: "Test",
             traffic: "Traffic",
+            updated: "Updated",
         },
     },
     he: {
@@ -17,6 +18,7 @@ const messages = {
             about: "אודות",
             test: "בדיקה",
             traffic: "תנועה",
+            updated: "עודכן",
         },
     },
 };

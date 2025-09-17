@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
 import PrimeChart from "primevue/chart";
-import { useThemeStore } from "../stores";
+import { useThemeStore } from "../../stores";
 
 type ChartType = "line" | "bar" | "doughnut" | "pie" | "radar" | "polarArea" | "bubble" | "scatter";
 interface ChartProps {
     type?: ChartType;
     data: Record<string, unknown>;
-    title?: string;
     height?: number | string;
 }
 
@@ -26,19 +25,7 @@ const options = computed(() => {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: {
-                labels: {
-                    color: "#000000",
-                },
-            },
-
-            title: props.title
-                ? {
-                      display: true,
-                      text: props.title,
-                      color: "#000000",
-                  }
-                : undefined,
+            legend: false,
         },
         scales: {
             x: {
@@ -70,5 +57,7 @@ const themedData = computed(() => {
 </script>
 
 <template>
-    <PrimeChart :type="type || 'bar'" :data="themedData" :options="options" class="h-full w-full overflow-auto" />
+    <div class="flex-1 overflow-auto pe-2">
+        <PrimeChart :type="type || 'bar'" :data="themedData" :options="options" class="_full" />
+    </div>
 </template>

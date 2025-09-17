@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Chart, ItemContainer } from "../../components";
-import { useI18n } from "vue-i18n";
+import { Chart, Container, NumberUi } from "../../components";
 
 const mockData = [
     {
@@ -62,50 +61,34 @@ const chartData = {
         },
     ],
 };
-const { t } = useI18n();
 </script>
 
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 _3xl-grid gap-6  max-h-full">
-        <ItemContainer>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 _3xl-grid gap-6 max-h-full">
+        <Container title="Cart" status="info" timestamp="2025-01-01 16:50:00">
             <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
+                <Chart :data="chartData" />
             </template>
-        </ItemContainer>
-        <ItemContainer>
+        </Container>
+        <Container title="Number Percentage" status="success" timestamp="2025-01-01 16:50:00">
             <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
+                <NumberUi :value="100" :format="'percentage'" />
             </template>
-        </ItemContainer>
-        <ItemContainer>
+        </Container>
+        <Container title="Number Currency" status="warning" timestamp="2025-01-01 16:50:00">
             <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
+                <NumberUi :value="5000" :format="'currency'" />
             </template>
-        </ItemContainer>
-        <ItemContainer>
+        </Container>
+        <Container title="Number Currency" status="error" timestamp="2025-01-01 16:50:00">
             <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
+                <NumberUi :value="-50" :format="'currency'" />
             </template>
-        </ItemContainer>
-        <ItemContainer>
+        </Container>
+        <Container title="Number Currency" status="critical" timestamp="2025-01-01 16:50:00">
             <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
+                <NumberUi :value="-50" :format="'currency'" />
             </template>
-        </ItemContainer>
-        <ItemContainer>
-            <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
-            </template>
-        </ItemContainer>
-        <ItemContainer>
-            <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
-            </template>
-        </ItemContainer>
-        <ItemContainer>
-            <template #default>
-                <Chart :data="chartData" :title="t('common.traffic')" />
-            </template>
-        </ItemContainer>
+        </Container>
     </div>
 </template>

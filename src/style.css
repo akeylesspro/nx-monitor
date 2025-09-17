@@ -18,11 +18,11 @@
 }
 ::-webkit-scrollbar-track {
     border-radius: 4px;
-    background: var(--color-on-primary);
+    background: var(--color-on-border);
 }
 ::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background: var(--color-border);
+    background: var(--color-primary);
     height: 80px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -100,4 +100,18 @@ body,
 
 body {
     @apply bg-[var(--color-bg)] text-[var(--color-text)];
+}
+
+._icon-blink {
+    animation: iconBlink 0.3s ease-in-out infinite;
+}
+
+@keyframes iconBlink {
+    0%,
+    100% {
+        color: var(--color-text);
+    }
+    50% {
+        color: rgb(239 68 68);
+    }
 }
