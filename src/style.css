@@ -44,7 +44,7 @@
 :root {
     color-scheme: light dark;
     --color-bg: #ffffff;
-    --color-surface: #f8fafc;
+    --color-surface: #e0e2e4;
     --color-text: #0f172a;
     --color-muted: #64748b;
     --color-border: #e2e8f0;
@@ -57,7 +57,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --color-bg: #0b1220;
-        --color-surface: #111827;
+        --color-surface: #1b1b20;
         --color-text: #e5e7eb;
         --color-muted: #9ca3af;
         --color-border: #374151;
@@ -68,10 +68,9 @@
     }
 }
 
-[data-theme="light"],
-[data-theme="Light"] {
+[data-theme="light"] {
     --color-bg: #ffffff;
-    --color-surface: #f8fafc;
+    --color-surface: #e0e2e4;
     --color-text: #0f172a;
     --color-muted: #64748b;
     --color-border: #e2e8f0;
@@ -81,10 +80,9 @@
     --color-secondary: #25deeb;
 }
 
-[data-theme="dark"],
-[data-theme="Dark"] {
+[data-theme="dark"] {
     --color-bg: #0b1220;
-    --color-surface: #111827;
+    --color-surface: #1b1b20;
     --color-text: #e5e7eb;
     --color-muted: #9ca3af;
     --color-border: #374151;
@@ -92,32 +90,6 @@
     --color-on-primary: #0b1220;
     --color-primary-transparent: #60a5fa33;
     --color-secondary: #eb392c;
-}
-
-[data-theme="akeyless"],
-[data-theme="Akeyless"] {
-    --color-bg: #0c1424;
-    --color-surface: #121e36;
-    --color-text: #e6edf7;
-    --color-muted: #9fb1c8;
-    --color-border: #263a5a;
-    --color-primary: #22c55e;
-    --color-on-primary: #0b1220;
-    --color-primary-transparent: #22c55e33;
-    --color-secondary: #d1bf19;
-}
-
-[data-theme="dev"] {
-    /* Distinct dev theme */
-    --color-bg: #0f0f14;
-    --color-surface: #131726;
-    --color-text: #e2e8f0;
-    --color-muted: #94a3b8;
-    --color-border: #475569;
-    --color-primary: #f59e0b;
-    --color-on-primary: #0f0f14;
-    --color-primary-transparent: #f59e0b33;
-    --color-secondary: #f5e026;
 }
 
 html,

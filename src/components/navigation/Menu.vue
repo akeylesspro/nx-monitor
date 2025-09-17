@@ -22,7 +22,7 @@ onUnmounted(() => {
 
 <template>
     <!-- Desktop sidebar -->
-    <nav class="xl:flex hidden p-3 flex-col gap-4 w-64 bg-[var(--color-surface)] border-[var(--color-border)] border-e">
+    <nav class="xl:flex hidden p-3 flex-col gap-4 w-64  border-[var(--color-border)] border-e">
         <Buttons />
         <Footer />
     </nav>
@@ -34,7 +34,7 @@ onUnmounted(() => {
             v-show="isOpen"
             :class="
                 cn(
-                    'fixed z-50 inset-y-0  w-48 p-3 flex flex-col gap-4 bg-[var(--color-surface)] border-[var(--color-border)] border-e ',
+                    'fixed z-50 inset-y-0  w-48 p-3 flex flex-col gap-4  border-[var(--color-border)] border-e ',
                     settings.isRtl ? 'right-0' : 'left-0'
                 )
             "

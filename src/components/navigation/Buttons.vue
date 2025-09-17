@@ -11,7 +11,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <div class="overflow-auto flex-1 flex flex-col gap-4 pe-2" :class="className">
+    <div class="overflow-auto flex-1 flex flex-col gap-2 pe-2" :class="className">
         <NavButton to="/" :label="t('common.home')" />
         <NavButton to="/about" :label="t('common.about')" />
         <NavButton to="/test" :label="t('common.test')" />

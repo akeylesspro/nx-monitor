@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
-import { setState, type SetState } from "./helpers";
 
-export const THEME_OPTIONS = ["system", "light", "dark", "akeyless"] as const;
+export const THEME_OPTIONS = ["system", "light", "dark"] as const;
 export type ThemeMode = (typeof THEME_OPTIONS)[number];
 
 const applyThemeAttribute = (mode: ThemeMode) => {
@@ -15,28 +14,22 @@ const applyThemeAttribute = (mode: ThemeMode) => {
     root.setAttribute("data-theme", mode);
 };
 
-const getSystemTheme = () => {
-    if (typeof window === "undefined") return "light";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-};
-
 export const useThemeStore = defineStore(
     "themeStore",
     () => {
-        const isMenuOpen = ref(false);
-        const setIsMenuOpen: SetState<boolean> = (value) => setState(isMenuOpen, value);
-
         const theme = ref<ThemeMode>("system");
-        const setTheme: SetState<ThemeMode> = (value) => setState(theme, value);
-        const isDark = computed<boolean>(() => {
-            if (theme.value === "system") {
-                return getSystemTheme() === "dark";
+
+        const activeTheme = computed(() => {
+            if (theme.value !== "system") {
+                return theme.value;
             }
-            return theme.value === "dark";
+            // Check system preference
+            if (typeof window === "undefined") return "light";
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         });
+
         const themeColors = computed(() => {
             void theme.value;
-
             if (typeof window === "undefined" || typeof document === "undefined") {
                 return {
                     primaryColor: "#2563eb",
@@ -67,6 +60,8 @@ export const useThemeStore = defineStore(
         const initializeTheme = () => {
             if (typeof window === "undefined") return;
 
+            applyThemeAttribute(theme.value);
+
             watch(theme, (newTheme) => {
                 applyThemeAttribute(newTheme);
             });
@@ -81,11 +76,8 @@ export const useThemeStore = defineStore(
         };
 
         return {
-            isMenuOpen,
-            setIsMenuOpen,
             theme,
-            setTheme,
-            isDark,
+            activeTheme,
             themeColors,
             initializeTheme,
             THEME_OPTIONS,
@@ -93,7 +85,7 @@ export const useThemeStore = defineStore(
     },
     {
         persist: {
-            key: "settings",
+            key: "themeStore",
             storage: localStorage,
             pick: ["theme"],
         },
