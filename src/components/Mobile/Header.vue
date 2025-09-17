@@ -7,7 +7,7 @@ const { setIsMenuOpen } = useSettingsStore();
 </script>
 
 <template>
-    <div class="flex items-center justify-between md:hidden px-3 py-2 border-b border-[var(--color-border)]">
+    <div class="flex items-center justify-between xl:hidden px-3 py-2 border-b border-[var(--color-border)]">
         <div class="flex items-center gap-2">
             <button
                 class="p-2 rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)]"

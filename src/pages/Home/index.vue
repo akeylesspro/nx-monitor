@@ -66,7 +66,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 _3xl-grid gap-6 md:w-fit max-h-full">
+    <div class="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 _3xl-grid gap-6  max-h-full">
         <ItemContainer>
             <template #default>
                 <Chart :data="chartData" :title="t('common.traffic')" />

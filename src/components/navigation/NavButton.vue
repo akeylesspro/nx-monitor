@@ -9,7 +9,7 @@ const props = defineProps<{
     label: string;
 }>();
 const { to, label } = toRefs(props);
-const className = "rounded-md block p-2 w-full h-full bg-[var(--color-muted)] text-[var(--color-on-primary)] hover:opacity-90";
+const className = "rounded-md block p-2 w-full h-full hover:bg-[var(--color-primary)] text-[var(--color-on-text)] hover:opacity-90";
 const route = useRoute();
 const isActive = computed(() => route.path === to.value);
 

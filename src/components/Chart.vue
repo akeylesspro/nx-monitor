@@ -17,7 +17,7 @@ const { type, data } = toRefs(props);
 const { themeColors } = toRefs(useThemeStore());
 
 const gridColor = computed(() => {
-    const color = themeColors.value.textColor;
+    const color = "#000000";
     return color + "33";
 });
 
@@ -28,7 +28,7 @@ const options = computed(() => {
         plugins: {
             legend: {
                 labels: {
-                    color: themeColors.value.textColor,
+                    color: "#000000",
                 },
             },
 
@@ -36,17 +36,17 @@ const options = computed(() => {
                 ? {
                       display: true,
                       text: props.title,
-                      color: themeColors.value.textColor,
+                      color: "#000000",
                   }
                 : undefined,
         },
         scales: {
             x: {
-                ticks: { color: themeColors.value.textColor },
+                ticks: { color: "#000000" },
                 grid: { color: gridColor.value },
             },
             y: {
-                ticks: { color: themeColors.value.textColor },
+                ticks: { color: "#000000" },
                 grid: { color: gridColor.value },
             },
         },

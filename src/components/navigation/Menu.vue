@@ -22,14 +22,13 @@ onUnmounted(() => {
 
 <template>
     <!-- Desktop sidebar -->
-    <nav class="md:flex hidden p-3 flex-col gap-4 w-64 bg-[var(--color-surface)] border-[var(--color-border)] border-e">
-        <Header />
+    <nav class="xl:flex hidden p-3 flex-col gap-4 w-64 bg-[var(--color-surface)] border-[var(--color-border)] border-e">
         <Buttons />
         <Footer />
     </nav>
 
     <!-- Mobile sidebar -->
-    <div class="md:hidden">
+    <div class="xl:hidden">
         <div aria-modal="true" v-show="isOpen" class="fixed inset-0 bg-black/50 z-40" @click="setIsMenuOpen(false)" />
         <nav
             v-show="isOpen"
@@ -40,7 +39,6 @@ onUnmounted(() => {
                 )
             "
         >
-            <Header :isMobile="true" />
             <Buttons />
             <Footer />
         </nav>
