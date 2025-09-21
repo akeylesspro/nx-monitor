@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
 import PrimeChart from "primevue/chart";
-import { useThemeStore } from "../../stores";
+import { useThemeStore } from "@/stores";
 
 type ChartType = "line" | "bar" | "doughnut" | "pie" | "radar" | "polarArea" | "bubble" | "scatter";
 interface ChartProps {
     type?: ChartType;
-    data: Record<string, unknown>;
+    value: Record<string, unknown>;
     height?: number | string;
 }
 
 const props = defineProps<ChartProps>();
 
-const { type, data } = toRefs(props);
+const { type, value } = toRefs(props);
 const { themeColors } = toRefs(useThemeStore());
 
 const gridColor = computed(() => {
@@ -41,7 +41,7 @@ const options = computed(() => {
 });
 
 const themedData = computed(() => {
-    const base: any = data.value as any;
+    const base: any = value.value as any;
     if (!base || typeof base !== "object") return base;
     const primary = themeColors.value.primaryColor;
 

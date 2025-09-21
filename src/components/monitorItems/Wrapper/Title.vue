@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
     title: string;
-    timestamp: string;
+    timestamp?: string;
     classNames: Record<string, string>;
 }>();
 const { title, timestamp, classNames } = toRefs(props);
@@ -15,12 +15,12 @@ const { t } = useI18n();
 <template>
     <div class="w-full flex flex-col gap-1">
         <div class="w-full flex items-end gap-2">
-            <i :class="cn(classNames.icon)" class="text-2xl"></i>
-            <span class="text-xl font-bold">{{ title }}</span>
+            <i :class="cn(classNames.icon)" class="text-3xl"></i>
+            <span class="text-2xl font-bold">{{ title }}</span>
         </div>
-        <div class="w-full flex items-center gap-2 text-[gray]">
-            <span class="text-sm">{{ t("common.updated") }}</span>
-            <span dir="ltr" class="text-sm">{{ timestamp }}</span>
+        <div v-if="timestamp" class="w-full flex items-center gap-2 text-[gray]">
+            <span>{{ t("common.updated") }}</span>
+            <span dir="ltr">{{ timestamp }}</span>
         </div>
     </div>
 </template>

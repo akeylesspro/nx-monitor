@@ -5,3 +5,7 @@ declare module "*.vue" {
     const component: DefineComponent<Record<string, never>, Record<string, never>, any>;
     export default component;
 }
+
+declare interface String {
+    toCapitalCase(options?: { firstLetterOnly: boolean; splitBy: string }): string;
+}

@@ -139,9 +139,9 @@ onUnmounted(() => {
                             v-for="option in themeOptions"
                             :key="option.value"
                             @click="handleThemeSelect(option.value)"
-                            class="w-full px-3 py-2 text-left rounded-md hover:bg-[var(--color-surface)] transition-colors duration-150 flex items-center gap-2"
+                            class="w-full px-3 py-2 text-left rounded-md transition-colors duration-150 flex items-center gap-2"
                             :class="{
-                                'bg-[var(--color-surface)] hover:bg-[var(--color-surface)]': theme === option.value,
+                                'bg-[var(--color-surface)]': theme === option.value,
                             }"
                         >
                             <span class="text-base">{{ option.icon }}</span>

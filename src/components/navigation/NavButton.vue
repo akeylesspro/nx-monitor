@@ -9,7 +9,8 @@ const props = defineProps<{
     label: string;
 }>();
 const { to, label } = toRefs(props);
-const className = "rounded-md block text-start px-2 py-1 w-full h-full hover:bg-[var(--color-surface)] text-[var(--color-on-text)] hover:opacity-90";
+const className =
+    "rounded-sm block text-start px-2 py-1 w-full hover text-[var(--color-on-text)] hover:opacity-90";
 const route = useRoute();
 const isActive = computed(() => route.path === to.value);
 
@@ -17,7 +18,5 @@ const { setIsMenuOpen } = useSettingsStore();
 </script>
 
 <template>
-    <button>
-        <router-link @click="setIsMenuOpen(false)" :class="cn(className, isActive && 'bg-[var(--color-surface)]')" :to="to">{{ label }}</router-link>
-    </button>
+    <router-link @click="setIsMenuOpen(false)" :class="cn(className, isActive && 'bg-[var(--color-surface)]')" :to="to">{{ label }}</router-link>
 </template>

@@ -6,7 +6,7 @@ import { cn } from "../../../helpers";
 const props = defineProps<{
     title: string;
     status: ItemStatus;
-    timestamp: string;
+    timestamp?: string;
 }>();
 const { title, status, timestamp } = toRefs(props);
 

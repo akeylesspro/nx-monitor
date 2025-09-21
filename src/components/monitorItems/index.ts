@@ -1,3 +1,3 @@
-export { default as Chart } from "./Chart.vue";
-export { default as NumberUi } from "./NumberUi.vue";
 export * from "./Wrapper";
+export * from "./ui";
+export { default as Page } from "./Page.vue";
