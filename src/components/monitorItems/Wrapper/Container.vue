@@ -7,8 +7,9 @@ const props = defineProps<{
     title: string;
     status: ItemStatus;
     timestamp?: string;
+    url?: string;
 }>();
-const { title, status, timestamp } = toRefs(props);
+const { title, status, timestamp, url } = toRefs(props);
 
 const classNames = computed(() => {
     switch (status.value) {
@@ -38,7 +39,7 @@ const classNames = computed(() => {
 
 <template>
     <div class="h-72 border rounded-md p-4 flex flex-col gap-2 text-black" :class="cn(classNames.bg, classNames.border)">
-        <Title :title="title" :timestamp="timestamp" :classNames="classNames" />
+        <Title :title="title" :timestamp="timestamp" :classNames="classNames" :url="url" />
         <slot />
     </div>
 </template>

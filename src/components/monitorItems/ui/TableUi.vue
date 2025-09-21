@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { toRefs } from "vue";
+import { isLink } from "../helpers";
 
 const props = defineProps<{
     value: any[];
@@ -29,7 +30,10 @@ const columns = Object.keys(value.value[0]).map((key) => ({
             <tbody>
                 <tr v-for="product in value" :key="product.code">
                     <td v-for="col of columns" :key="col.field" class="p-1 text-left border border-[var(--color-border)]">
-                        {{ product[col.field] }}
+                        <a v-if="isLink(product[col.field])" class="text-blue-600 underline" :href="product[col.field]" target="_blank">{{
+                            product[col.field]
+                        }}</a>
+                        <span v-else>{{ product[col.field] }}</span>
                     </td>
                 </tr>
             </tbody>

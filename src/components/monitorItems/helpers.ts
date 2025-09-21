@@ -3,10 +3,11 @@ import type { ItemData, ItemStatus, ItemValue, MetaItem, Thresholds } from "@/ty
 import { getChartData, getListData, getTableData } from "./mockData";
 
 /// return items meta list
-export const getItemsMetaList = (pageName: string): MetaItem[] => {
+export const getMetaList = (pageName: string): MetaItem[] => {
     const res: MetaItem[] = [
         {
             title: "Chart",
+            title_link: "https://akeyless-toolbox.online",
             page_name: "home",
             type: "chart",
             format: "int",
@@ -79,7 +80,7 @@ export const getItemsMetaList = (pageName: string): MetaItem[] => {
 };
 
 /// return items data list
-export const getItemsDataList = (metaList: MetaItem[]): Record<string, { value: ItemValue; updated: string }> => {
+export const getDataList = (): Record<string, { value: ItemValue; updated: string }> => {
     return {
         "number-percentage": {
             value: 90,
@@ -241,5 +242,6 @@ export const calculateStatus = (
 };
 
 export const isLink = (value: string) => {
-    return value.startsWith("http");
+    if (!value) return false;
+    return String(value).startsWith("http");
 };

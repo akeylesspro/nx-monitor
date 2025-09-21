@@ -7,8 +7,9 @@ const props = defineProps<{
     title: string;
     timestamp?: string;
     classNames: Record<string, string>;
+    url?: string;
 }>();
-const { title, timestamp, classNames } = toRefs(props);
+const { title, timestamp, classNames, url } = toRefs(props);
 const { t } = useI18n();
 </script>
 
@@ -16,7 +17,10 @@ const { t } = useI18n();
     <div class="w-full flex flex-col gap-1">
         <div class="w-full flex items-end gap-2">
             <i :class="cn(classNames.icon)" class="text-3xl"></i>
-            <span class="text-2xl font-bold">{{ title }}</span>
+            <span class="text-2xl font-bold">
+                <a v-if="url" class="text-blue-600 underline" :href="url" target="_blank">{{ title }}</a>
+                <span v-else>{{ title }}</span>
+            </span>
         </div>
         <div v-if="timestamp" class="w-full flex items-center gap-2 text-[gray]">
             <span>{{ t("common.updated") }}</span>

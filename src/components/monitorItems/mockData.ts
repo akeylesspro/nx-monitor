@@ -15,7 +15,7 @@ export const getChartData = (mockData: { label: string; value: number }[] = []) 
 export const getTableData = () => {
     return [
         {
-            code: "P001",
+            code: "https://akeyless-toolbox.online",
             name: "Monitor Display",
             category: "Hardware",
             quantity: 15,
@@ -119,7 +119,7 @@ export const getTableData = () => {
 
 export const getListData = (): string[] => {
     return [
-        "https://akeyless-toolbox.online/",
+        "https://akeyless-toolbox.online",
         "232323232",
         "3sasasa sasas asasas xlfkvbjuxcjdfkvhn km,jb ncxfmjbnm ,kcxgbjnkm",
         "sa dasd sa das",
