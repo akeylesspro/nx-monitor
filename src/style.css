@@ -50,7 +50,7 @@
     --color-surface: #e0e2e4;
     --color-text: #0f172a;
     --color-muted: #64748b;
-    --color-border: #e2e8f0;
+    --color-border: #caced6;
     --color-primary: #2563eb;
     --color-on-primary: #ffffff;
     --color-primary-transparent: #2563eb33;
@@ -112,7 +112,7 @@
     --color-surface: #e0e2e4;
     --color-text: #0f172a;
     --color-muted: #64748b;
-    --color-border: #e2e8f0;
+    --color-border: #caced6;
     --color-primary: #2563eb;
     --color-on-primary: #ffffff;
     --color-primary-transparent: #2563eb33;
@@ -248,10 +248,10 @@ body {
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }
