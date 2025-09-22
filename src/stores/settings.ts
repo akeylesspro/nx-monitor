@@ -22,7 +22,7 @@ export const useSettingsStore = defineStore(
     },
     {
         persist: {
-            key: "settings",
+            key: "settingsStore",
             storage: localStorage,
         },
     }

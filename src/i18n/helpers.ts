@@ -10,6 +10,11 @@ const messages = {
             test: "Test",
             traffic: "Traffic",
             updated: "Updated",
+            phoneNumber: "Phone Number",
+            sendCode: "Send Code",
+            loginWithPhone: "Login with phone number",
+            loginWithEmail: "Login with email",
+            login: "Login",
         },
     },
     he: {
@@ -19,6 +24,11 @@ const messages = {
             test: "בדיקה",
             traffic: "תנועה",
             updated: "עודכן",
+            phoneNumber: "מספר טלפון",
+            sendCode: "שלח קוד",
+            loginWithPhone: "התחברות עם מספר טלפון",
+            loginWithEmail: "התחברות עם אימייל",
+            login: "התחברות",
         },
     },
 };
