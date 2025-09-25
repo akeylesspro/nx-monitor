@@ -3,7 +3,6 @@ import { effect, ref } from "vue";
 import { useRouter } from "vue-router";
 import InputOtp from "@/volt/InputOtp.vue";
 import { signInWithPhone, verifyCode } from "./helpers";
-import { useI18n } from "vue-i18n";
 import Loader from "@/components/Loader.vue";
 import type { NxUser } from "akeyless-types-commons";
 

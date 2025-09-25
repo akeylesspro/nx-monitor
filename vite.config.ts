@@ -7,7 +7,7 @@ export default defineConfig(() => {
     return {
         plugins: [vue(), tailwindcss()],
         server: {
-            port: 9004,
+            port: 8004,
         },
         resolve: {
             alias: {
