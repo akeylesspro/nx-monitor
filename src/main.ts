@@ -8,6 +8,7 @@ import { createPinia } from "pinia";
 import persistedState from "pinia-plugin-persistedstate";
 import { useThemeStore } from "./stores";
 import { setup } from "./i18n";
+import "@/helpers/firebase";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -16,7 +17,6 @@ app.use(pinia);
 
 const { initializeTheme } = useThemeStore();
 initializeTheme();
-
 const i18n = setup();
 
 app.use(router);

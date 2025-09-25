@@ -1,3 +1,7 @@
+export interface StringObject<T = any> {
+    [key: string]: T;
+}
+
 export type ItemStatus = "success" | "error" | "warning" | "info" | "critical";
 
 export type MetaType = "value" | "list" | "table" | "chart";

@@ -122,6 +122,14 @@ button {
         @apply bg-[var(--color-hover)];
         transition: 0.4s;
     }
+    &:disabled {
+        opacity: 0.5;
+        &:hover {
+            @apply bg-transparent;
+            transition: 0.4s;
+            cursor: default;
+        }
+    }
 }
 
 body {
@@ -140,6 +148,19 @@ body {
     50% {
         color: rgb(239 68 68);
     }
+}
+
+@keyframes spin-reverse {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.animate-spin-reverse {
+    animation: spin-reverse 1s linear infinite;
 }
 
 @theme inline {

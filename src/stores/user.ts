@@ -3,6 +3,7 @@ import { computed, ref, effect } from "vue";
 import { setState, type SetState } from "./helpers";
 import type { NxUser } from "akeyless-types-commons";
 import { jwtDecode } from "jwt-decode";
+import { getUserByIdentifier } from "@/helpers";
 
 export const useUserStore = defineStore(
     "user",
@@ -11,18 +12,20 @@ export const useUserStore = defineStore(
         const setToken: SetState<string> = (value) => setState(token, value);
         const user = ref<NxUser | null>(null);
         const setUser: SetState<NxUser | null> = (value) => setState(user, value);
-        const isLoggedIn = computed(() => true);
-        // const isLoggedIn = computed(() => Boolean(user.value) && Boolean(user.value!.clients));
-        effect(() => {
-            if (token.value) {
-                const result = getUserByToken(token.value);
-                console.log("token result", result);
-                // setUser(result);
+        const isLoggedIn = computed(() => Boolean(user.value) && Boolean(user.value!.clients));
+        const logout = () => {
+            setToken("");
+            setUser(null);
+        };
+        effect(async () => {
+            if (!token.value) {
                 return;
             }
-            console.log("no token");
+            const result = getUserByToken(token.value);
+            const userResult = await getUserByIdentifier(result.email || result.phone_number || "");
+            setUser(userResult);
         });
-        return { token, setToken, user, setUser, isLoggedIn };
+        return { token, setToken, user, setUser, isLoggedIn, logout };
     },
     {
         persist: {

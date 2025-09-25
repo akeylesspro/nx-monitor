@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AkeylessLogo from "@/components/AkeylessLogo.vue";
-import { PhoneLogin, EmailLogin, Switches } from "./";
+import { PhoneLogin, GoogleLogin, Switches } from "./";
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import { PhoneLogin, EmailLogin, Switches } from "./";
         <div class="w-96 p-4 mx-4 shadow-lg rounded-lg border border-[var(--color-border)] flex flex-col gap-5">
             <PhoneLogin />
             <div class="w-full h-px bg-[var(--color-surface)]" />
-            <EmailLogin />
+            <GoogleLogin />
             <div class="w-full h-px bg-[var(--color-surface)]" />
             <Switches />
         </div>

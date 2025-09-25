@@ -15,6 +15,13 @@ const messages = {
             loginWithPhone: "Login with phone number",
             loginWithEmail: "Login with email",
             login: "Login",
+            logout: "Logout",
+            verifyCode: "Verify Code",
+        },
+        errors: {
+            userNotFound: "User not found",
+            tokenNotFound: "Token not found",
+            codeNotValid: "Code not valid",
         },
     },
     he: {
@@ -29,6 +36,13 @@ const messages = {
             loginWithPhone: "התחברות עם מספר טלפון",
             loginWithEmail: "התחברות עם אימייל",
             login: "התחברות",
+            logout: "התנתקות",
+            verifyCode: "אימות קוד",
+        },
+        errors: {
+            userNotFound: "משתמש לא נמצא",
+            tokenNotFound: "טוקן לא נמצא",
+            codeNotValid: "קוד לא תקין",
         },
     },
 };
