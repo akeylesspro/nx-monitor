@@ -3,7 +3,7 @@ import { computed, ref, effect } from "vue";
 import { setState, type SetState } from "./helpers";
 import type { NxUser } from "akeyless-types-commons";
 import { jwtDecode } from "jwt-decode";
-import { getUserByIdentifier } from "@/helpers";
+import { getUserByIdentifier, createExpiringStorage } from "@/helpers";
 
 export const useUserStore = defineStore(
     "user",
@@ -18,7 +18,7 @@ export const useUserStore = defineStore(
             setUser(null);
         };
         effect(async () => {
-            if (!token.value) {
+            if (!token.value || user) {
                 return;
             }
             const result = getUserByToken(token.value);
@@ -30,8 +30,8 @@ export const useUserStore = defineStore(
     {
         persist: {
             key: "userStore",
-            storage: localStorage,
-            pick: ["token"],
+            storage: createExpiringStorage({ ttlMs: 7 * 24 * 60 * 60 * 1000 }),
+            pick: ["token", "user"],
         },
     }
 );

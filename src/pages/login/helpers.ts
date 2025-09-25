@@ -1,5 +1,6 @@
 import { auth, getUserByEmail, getUserByIdentifier, googleLoginProvider } from "@/helpers";
 import { useUserStore } from "@/stores";
+import type { NxUser } from "akeyless-types-commons";
 import { signInWithPhoneNumber, signInWithPopup } from "firebase/auth";
 
 export const signInWithGoogle = async (): Promise<boolean> => {
@@ -18,8 +19,9 @@ export const signInWithGoogle = async (): Promise<boolean> => {
         throw new Error("userNotFound");
     }
     const userStore = useUserStore();
-    const { setToken } = userStore;
+    const { setToken, setUser } = userStore;
     setToken(token);
+    setUser(nxUser);
     return true;
 };
 
@@ -34,10 +36,10 @@ export const signInWithPhone = async (phone: string) => {
 
     const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
     window.confirmationResult = confirmationResult;
-    return true;
+    return user;
 };
 
-export const verifyCode = async (code: string) => {
+export const verifyCode = async (code: string, user: NxUser) => {
     const confirmationResult = window.confirmationResult;
     let token: string = "";
     try {
@@ -50,7 +52,8 @@ export const verifyCode = async (code: string) => {
         throw new Error("tokenNotFound");
     }
     const userStore = useUserStore();
-    const { setToken } = userStore;
+    const { setToken, setUser } = userStore;
     setToken(token);
+    setUser(user);
     return true;
 };

@@ -5,6 +5,7 @@ import InputOtp from "@/volt/InputOtp.vue";
 import { signInWithPhone, verifyCode } from "./helpers";
 import { useI18n } from "vue-i18n";
 import Loader from "@/components/Loader.vue";
+import type { NxUser } from "akeyless-types-commons";
 
 const phoneValue = ref("");
 const codeValue = ref("");
@@ -12,14 +13,16 @@ const errorMessage = ref("");
 const showCode = ref(false);
 const isLoading = ref(false);
 const router = useRouter();
-const handleSubmit = async () => {    
+const databaseUser = ref<NxUser | null>(null);
+const handleSubmit = async () => {
     try {
         isLoading.value = true;
         if (showCode.value) {
-            await verifyCode(codeValue.value);
+            await verifyCode(codeValue.value, databaseUser.value!);
             router.push("/");
         } else {
-            await signInWithPhone(phoneValue.value);
+            const user = await signInWithPhone(phoneValue.value);
+            databaseUser.value = user;
             showCode.value = true;
         }
     } catch (error: any) {
