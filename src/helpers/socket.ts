@@ -20,6 +20,32 @@ class SocketService {
     private authToken: string | null = null;
     private subscribedCollections: Set<string> = new Set();
     private subscriptionConfigs: Map<string, OnSnapshotConfig[]> = new Map();
+    // Recent events guard to prevent duplicated processing (server-side duplicates, reconnections etc.)
+    private recentEvents: Map<string, number> = new Map();
+    private readonly dedupeWindowMs = 300;
+
+    private shouldProcessEvent(eventName: string, docs: any[]): boolean {
+        try {
+            const ids = Array.isArray(docs) ? docs.map((d: any) => d?.id).filter(Boolean).sort() : [];
+            const key = `${eventName}:${ids.join(",")}`;
+            const now = Date.now();
+            const last = this.recentEvents.get(key) || 0;
+            if (now - last < this.dedupeWindowMs) {
+                return false;
+            }
+            this.recentEvents.set(key, now);
+            // Periodically trim old entries
+            if (this.recentEvents.size > 500) {
+                const threshold = now - this.dedupeWindowMs * 10;
+                for (const [k, t] of this.recentEvents.entries()) {
+                    if (t < threshold) this.recentEvents.delete(k);
+                }
+            }
+            return true;
+        } catch {
+            return true;
+        }
+    }
     /// Initialize the socket connection
     private initSocket(): void {
         if (!this.socket) {
@@ -175,26 +201,48 @@ class SocketService {
 
             // Only process collections that are not already subscribed
             if (!this.subscribedCollections.has(collectionName)) {
-                // Before attaching, make sure the specific handler is NOT already registered.
-                const attach = (eventName: string, handler?: OnSnapshotCallback) => {
+                // Build a single dispatcher per event that fans out to all handlers (main + extras)
+                const buildDispatcher = (
+                    baseHandler: OnSnapshotCallback | undefined,
+                    extraHandlers: Array<OnSnapshotCallback | undefined> | undefined
+                ): OnSnapshotCallback | null => {
+                    const handlers = [baseHandler, ...(extraHandlers || [])].filter(Boolean) as OnSnapshotCallback[];
+                    if (handlers.length === 0) return null;
+                    const dispatcher: OnSnapshotCallback = (docs: any[]) => {
+                        if (!this.shouldProcessEvent(currentEventName!, docs)) return;
+                        handlers.forEach((h) => h(docs, configuration));
+                    };
+                    return dispatcher;
+                };
+
+                const initialEvent = `initial:${collectionName}`;
+                const addEvent = `add:${collectionName}`;
+                const updateEvent = `update:${collectionName}`;
+                const deleteEvent = `delete:${collectionName}`;
+
+                let currentEventName: string | null = null;
+
+                currentEventName = initialEvent;
+                const initialDispatcher = buildDispatcher(onFirstTime, extraParsers?.map((p) => p.onFirstTime));
+                currentEventName = addEvent;
+                const addDispatcher = buildDispatcher(onAdd, extraParsers?.map((p) => p.onAdd));
+                currentEventName = updateEvent;
+                const updateDispatcher = buildDispatcher(onModify, extraParsers?.map((p) => p.onModify));
+                currentEventName = deleteEvent;
+                const deleteDispatcher = buildDispatcher(onRemove, extraParsers?.map((p) => p.onRemove));
+
+                const attach = (eventName: string, handler: OnSnapshotCallback | null) => {
                     if (!handler) return;
-                    this.socket!.off(eventName, handler);
+                    // Ensure only a single listener exists per event
+                    this.socket!.off(eventName); // remove all previous listeners for this event
                     this.socket!.on(eventName, handler);
                     eventHandlers.push({ eventName, handler });
                 };
-                
-                attach(`initial:${collectionName}`, onFirstTime);
-                attach(`add:${collectionName}`, onAdd);
-                attach(`update:${collectionName}`, onModify);
-                attach(`delete:${collectionName}`, onRemove);
 
-                extraParsers?.forEach((parsers) => {
-                    const { onAdd: extraOnAdd, onFirstTime: extraOnFirstTime, onModify: extraOnModify, onRemove: extraOnRemove } = parsers;
-                    attach(`initial:${collectionName}`, extraOnFirstTime);
-                    attach(`add:${collectionName}`, extraOnAdd);
-                    attach(`update:${collectionName}`, extraOnModify);
-                    attach(`delete:${collectionName}`, extraOnRemove);
-                });
+                attach(initialEvent, initialDispatcher);
+                attach(addEvent, addDispatcher);
+                attach(updateEvent, updateDispatcher);
+                attach(deleteEvent, deleteDispatcher);
 
                 // Mark collection as subscribed and store its config
                 this.subscribedCollections.add(collectionName);
