@@ -6,7 +6,7 @@ const messages = {
     en: {
         common: {
             home: "Home",
-            about: "About",
+            servers: "Servers",
             test: "Test",
             traffic: "Traffic",
             updated: "Updated",
@@ -27,7 +27,7 @@ const messages = {
     he: {
         common: {
             home: "בית",
-            about: "אודות",
+            servers: "שרתים",
             test: "בדיקה",
             traffic: "תנועה",
             updated: "עודכן",

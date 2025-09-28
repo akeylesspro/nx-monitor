@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { setState, type SetState } from "./helpers";
 import type { DataItem, MetaItem, StringObject } from "@/types";
 
@@ -10,7 +10,9 @@ export const useCacheStore = defineStore("cache", () => {
     const setNxSettings: SetState<StringObject> = (value) => setState(nxSettings, value);
     const metaData = ref<MetaItem[]>([]);
     const setMetaData: SetState<MetaItem[]> = (value) => setState(metaData, value);
-    const dataItem = ref<DataItem[]>([]);
-    const setDataItem: SetState<DataItem[]> = (value) => setState(dataItem, value);
-    return { settings, setSettings, nxSettings, setNxSettings, metaData, setMetaData, dataItem, setDataItem };
+    const dataItems = ref<StringObject<DataItem>>({});
+    const setDataItems: SetState<StringObject<DataItem>> = (value) => setState(dataItems, value);
+    const getMetaItems = (metaData: MetaItem[], pageName: string) => metaData.filter((item) => (item.pages || []).includes(pageName));
+
+    return { settings, setSettings, nxSettings, setNxSettings, metaData, setMetaData, dataItems, setDataItems, getMetaItems };
 });

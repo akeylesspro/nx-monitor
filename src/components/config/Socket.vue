@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { parseSnapshotAsObject, socketServiceInstance } from "@/helpers";
+import { parseSnapshotAsArray, parseSnapshotAsObject, socketServiceInstance } from "@/helpers";
 import { useCacheStore, useUserStore } from "@/stores";
 import { onMounted } from "vue";
 
-const { setNxSettings, setSettings } = useCacheStore();
+const { setNxSettings, setSettings, setDataItems, setMetaData } = useCacheStore();
 const userStore = useUserStore();
-
 onMounted(async () => {
     const token = userStore.token;
     if (!token) {
@@ -15,13 +14,28 @@ onMounted(async () => {
     socketServiceInstance.subscribeToCollections([
         {
             collectionName: "nx-settings",
-            ...parseSnapshotAsObject(setNxSettings, { debug: true, debugName: "nx-settings" }),
+            ...parseSnapshotAsObject(setNxSettings),
         },
         {
             collectionName: "settings",
-            ...parseSnapshotAsObject(setSettings, { debug: true, debugName: "settings" }),
+            ...parseSnapshotAsObject(setSettings),
+        },
+        {
+            collectionName: "nx-monitor-data",
+            ...parseSnapshotAsObject(setDataItems, { debug: true, debugName: "nx-monitor-data" }),
+        },
+        {
+            collectionName: "nx-monitor-meta",
+            ...parseSnapshotAsArray(setMetaData, { debug: true, debugName: "nx-monitor-meta" }),
         },
     ]);
+
+    socketServiceInstance.onConnect(() => {
+        socketServiceInstance.onDisconnect(() => {
+            // window.location.reload();
+            alert("🔴 Socket disconnected");
+        });
+    });
 });
 </script>
 

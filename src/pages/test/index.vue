@@ -1,7 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Page } from "@/components";
+</script>
 
 <template>
-    <div>
-        <h1>Test</h1>
-    </div>
+    <Page :pageName="'test'" />
 </template>

@@ -7,6 +7,7 @@ const props = defineProps<{
     format?: ItemFormat;
 }>();
 const { value, format } = toRefs(props);
+
 const formatUi = computed(() => {
     switch (format.value) {
         case "currency":
@@ -17,6 +18,7 @@ const formatUi = computed(() => {
             return "";
     }
 });
+
 const valueUi = computed(() => {
     switch (format.value) {
         case "int":
@@ -24,7 +26,7 @@ const valueUi = computed(() => {
         case "decimal":
             return Number(value.value).toFixed(2);
         default:
-            return value.value;
+            return typeof value.value === "number" ? value.value.toFixed(0) : String(value.value);
     }
 });
 </script>

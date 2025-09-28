@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 import { Loader } from "./components";
 import Layout from "./Layout.vue";
-import { LoginPage, Recaptcha } from "./pages/login";
+import { LoginPage, Recaptcha } from "./pages/Login";
 import { useUserStore } from "./stores";
 
 const userStore = useUserStore();

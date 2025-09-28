@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AkeylessLogo from "@/components/AkeylessLogo.vue";
-import { GoogleLogin, Switches } from "./";
+import { GoogleLogin, Switches } from ".";
 </script>
 
 <template>

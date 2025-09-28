@@ -1,166 +1,5 @@
 import { ChartUi, ListUi, TableUi, ValueUi } from "@/components";
 import type { DataItem, ItemStatus, ItemValue, MetaItem, Thresholds } from "@/types";
-import { getChartData, getListData, getTableData } from "./mockData";
-
-/// return items meta list
-export const getMetaList = (pageName: string): MetaItem[] => {
-    const res: MetaItem[] = [
-        {
-            title: "Chart",
-            title_link: "https://akeyless-toolbox.online",
-            page_name: "home",
-            type: "chart",
-            format: "int",
-            name: "chart",
-        },
-        {
-            title: "Number Percentage",
-            page_name: "home",
-            type: "value",
-            format: "percent",
-            name: "number-percentage",
-            value_thresholds: {
-                yellow: 60,
-                red: 80,
-                critical: 90,
-            },
-        },
-        {
-            title: "Number int",
-            page_name: "home",
-            type: "value",
-            format: "int",
-            name: "number-int",
-            value_thresholds: {
-                yellow: 60,
-                red: 70,
-                critical: 80,
-            },
-        },
-        {
-            title: "Number decimal",
-            page_name: "home",
-            type: "value",
-            format: "decimal",
-            name: "number-decimal",
-            value_thresholds: {
-                yellow: 60,
-                red: 70,
-                critical: 80,
-            },
-        },
-        {
-            title: "Number currency",
-            page_name: "home",
-            type: "value",
-            format: "currency",
-            name: "number-currency",
-            value_thresholds: {
-                yellow: 60,
-                red: 70,
-                critical: 90,
-            },
-        },
-        {
-            title: "Table",
-            page_name: "home",
-            type: "table",
-            format: "string",
-            name: "table-data",
-        },
-        {
-            title: "List",
-            page_name: "home",
-            type: "list",
-            format: "string",
-            name: "list-data",
-        },
-    ];
-    return res.filter((item) => item.page_name === pageName);
-};
-
-/// return items data list
-export const getDataList = (): Record<string, { value: ItemValue; updated: string }> => {
-    return {
-        "number-percentage": {
-            value: 90,
-            updated: "2025-01-01 16:50:00",
-        },
-        "number-int": {
-            value: 50.6,
-            updated: "2025-01-01 16:50:00",
-        },
-        "number-currency": {
-            value: 80,
-            updated: "2025-01-01 16:50:00",
-        },
-        "number-decimal": {
-            value: 62.59,
-            updated: "2025-01-01 16:50:00",
-        },
-        chart: {
-            value: [
-                {
-                    label: "Jan",
-                    value: 120,
-                },
-                {
-                    label: "Feb",
-                    value: 150,
-                },
-                {
-                    label: "Mar",
-                    value: 180,
-                },
-                {
-                    label: "Apr",
-                    value: 130,
-                },
-                {
-                    label: "May",
-                    value: 200,
-                },
-                {
-                    label: "Jun",
-                    value: 240,
-                },
-                {
-                    label: "Jul",
-                    value: 260,
-                },
-                {
-                    label: "Aug",
-                    value: 280,
-                },
-                {
-                    label: "Sep",
-                    value: 300,
-                },
-                {
-                    label: "Oct",
-                    value: 320,
-                },
-                {
-                    label: "Nov",
-                    value: 340,
-                },
-                {
-                    label: "Dec",
-                    value: 30,
-                },
-            ],
-            updated: "2025-01-01 16:50:00",
-        },
-        "table-data": {
-            value: getTableData() as any[],
-            updated: "2025-01-01 16:50:00",
-        },
-        "list-data": {
-            value: getListData(),
-            updated: "2025-01-01 16:50:00",
-        },
-    };
-};
 
 export const getItemComponent = (item: MetaItem) => {
     switch (item.type) {
@@ -181,8 +20,8 @@ export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
     if (!item || !DataItem) {
         return null;
     }
-    const { type, valueKeyRef } = item;
-    const valueKey = valueKeyRef || "value";
+    const { type, value_key_ref } = item;
+    const valueKey = value_key_ref || "value";
     switch (type) {
         case "value":
             return {
@@ -190,7 +29,7 @@ export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
                 format: item.format,
             };
         case "chart":
-            const chartData = getChartData(DataItem[valueKey] as { label: string; value: number }[]);
+            const chartData = parseChartData(DataItem[valueKey] as { label: string; value: number }[]);
             return {
                 value: chartData,
             };
@@ -208,9 +47,13 @@ export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
 };
 
 export const calculateStatus = (
-    value: ItemValue,
+    value: ItemValue | undefined,
     { valueThresholds, updatedThresholds }: { valueThresholds?: Thresholds; updatedThresholds?: Thresholds }
 ): ItemStatus => {
+    if (!value) {
+        console.error("Value is undefined", value);
+        return "error";
+    }
     const numericValue = Number(value);
     const isNumeric = !isNaN(numericValue);
     if (Array.isArray(value)) {
@@ -244,4 +87,17 @@ export const calculateStatus = (
 export const isLink = (value: string) => {
     if (!value) return false;
     return String(value).startsWith("http");
+};
+
+const parseChartData = (mockData: { label: string; value: number }[] = []) => {
+    const chartData = {
+        labels: mockData.map((item) => item.label),
+        datasets: [
+            {
+                label: "",
+                data: mockData.map((item) => item.value),
+            },
+        ],
+    };
+    return chartData;
 };

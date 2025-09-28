@@ -28,13 +28,12 @@ onUnmounted(() => {
     </nav>
 
     <!-- Mobile sidebar -->
-    <div class="xl:hidden">
-        <div aria-modal="true" v-show="isOpen" class="fixed inset-0 bg-black/50 z-40" @click="setIsMenuOpen(false)" />
+    <div v-show="isOpen" class="xl:hidden">
+        <div aria-modal="true" class="fixed inset-0 bg-black/50 z-40" @click="setIsMenuOpen(false)" />
         <nav
-            v-show="isOpen"
             :class="
                 cn(
-                    'fixed z-50 inset-y-0  w-48  flex flex-col bg-[var(--color-bg)] border-[var(--color-border)] border-e ',
+                    'fixed z-50 inset-y-0  w-48  flex flex-col bg-[var(--color-bg)] border-[var(--color-border)] border-e animate-fadeinright animate-duration-200',
                     settings.isRtl ? 'right-0' : 'left-0'
                 )
             "

@@ -20,13 +20,17 @@ class SocketService {
     private authToken: string | null = null;
     private subscribedCollections: Set<string> = new Set();
     private subscriptionConfigs: Map<string, OnSnapshotConfig[]> = new Map();
-    // Recent events guard to prevent duplicated processing (server-side duplicates, reconnections etc.)
     private recentEvents: Map<string, number> = new Map();
     private readonly dedupeWindowMs = 300;
 
     private shouldProcessEvent(eventName: string, docs: any[]): boolean {
         try {
-            const ids = Array.isArray(docs) ? docs.map((d: any) => d?.id).filter(Boolean).sort() : [];
+            const ids = Array.isArray(docs)
+                ? docs
+                      .map((d: any) => d?.id)
+                      .filter(Boolean)
+                      .sort()
+                : [];
             const key = `${eventName}:${ids.join(",")}`;
             const now = Date.now();
             const last = this.recentEvents.get(key) || 0;
@@ -68,7 +72,7 @@ class SocketService {
             });
 
             this.socket.on("connect", () => {
-                console.log(`🟢 Socket connected: ${this.socket?.id} (recovered - ${this.socket?.recovered})`);
+                console.log(`🟢 Socket connected: ${this.socket?.id}`);
                 this.connectCallbacks.forEach((cb) => cb());
             });
 
@@ -182,7 +186,7 @@ class SocketService {
         if (config.length === 0) {
             return () => {};
         }
-        
+
         const s = this.getSocketInstance();
         const collectionsNames = config.map((c) => c.collectionName);
 
@@ -223,13 +227,25 @@ class SocketService {
                 let currentEventName: string | null = null;
 
                 currentEventName = initialEvent;
-                const initialDispatcher = buildDispatcher(onFirstTime, extraParsers?.map((p) => p.onFirstTime));
+                const initialDispatcher = buildDispatcher(
+                    onFirstTime,
+                    extraParsers?.map((p) => p.onFirstTime)
+                );
                 currentEventName = addEvent;
-                const addDispatcher = buildDispatcher(onAdd, extraParsers?.map((p) => p.onAdd));
+                const addDispatcher = buildDispatcher(
+                    onAdd,
+                    extraParsers?.map((p) => p.onAdd)
+                );
                 currentEventName = updateEvent;
-                const updateDispatcher = buildDispatcher(onModify, extraParsers?.map((p) => p.onModify));
+                const updateDispatcher = buildDispatcher(
+                    onModify,
+                    extraParsers?.map((p) => p.onModify)
+                );
                 currentEventName = deleteEvent;
-                const deleteDispatcher = buildDispatcher(onRemove, extraParsers?.map((p) => p.onRemove));
+                const deleteDispatcher = buildDispatcher(
+                    onRemove,
+                    extraParsers?.map((p) => p.onRemove)
+                );
 
                 const attach = (eventName: string, handler: OnSnapshotCallback | null) => {
                     if (!handler) return;

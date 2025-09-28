@@ -22,11 +22,11 @@ export interface Thresholds {
 export interface MetaItem {
     name: string;
     type: MetaType;
-    page_name: string;
+    pages: string[];
     format: ItemFormat;
     title: string;
     title_link?: string;
-    valueKeyRef?: string;
+    value_key_ref?: string;
     value_thresholds?: Thresholds;
     updated_thresholds?: Thresholds;
     status?: ItemStatus;
