@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { Loader } from "./components";
+import { Loader, Version } from "./components";
 import Layout from "./Layout.vue";
 import { LoginPage, Recaptcha } from "./pages/Login";
 import { useUserStore } from "./stores";
@@ -16,4 +16,5 @@ const { isLoggedIn, token } = storeToRefs(userStore);
     <Layout v-else-if="isLoggedIn && $route.path !== '/login'" />
     <LoginPage v-else />
     <Recaptcha />
+    <Version />
 </template>
