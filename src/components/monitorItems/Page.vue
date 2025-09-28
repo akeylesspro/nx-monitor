@@ -19,16 +19,16 @@ const processedItems = computed(() => {
     const res = itemsMetaList.map((item) => {
         const component = getItemComponent(item);
         const props = getItemProps(item, itemsDataList[item.name]);
-        const itemData = itemsDataList[item.name];
+        const dataItem = itemsDataList[item.name];
 
         return {
             ...item,
             component,
             props,
-            itemData,
+            dataItem,
             status:
                 item.status ||
-                calculateStatus(itemData.value, {
+                calculateStatus(dataItem.value, {
                     updatedThresholds: item.updated_thresholds,
                     valueThresholds: item.value_thresholds,
                 }),
@@ -47,12 +47,12 @@ const processedItems = computed(() => {
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 _3xl-grid gap-6 max-h-full">
         <template v-for="item in processedItems" :key="item.name">
-            <Container v-if="item.isValid" :title="item.title" :status="item.status" :timestamp="item.itemData?.updated" :url="item.title_link">
+            <Container v-if="item.isValid" :title="item.title" :status="item.status" :timestamp="item.dataItem?.updated" :url="item.title_link">
                 <template #default>
                     <component :is="item.component" v-bind="item.props as any" />
                 </template>
             </Container>
-            <Container v-else :title="item.title" :status="'error'" :timestamp="item.itemData?.updated">
+            <Container v-else :title="item.title" :status="'error'" :timestamp="item.dataItem?.updated">
                 <template #default>
                     <ValueUi :value="'error'" />
                 </template>

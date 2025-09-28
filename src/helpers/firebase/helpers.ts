@@ -15,9 +15,10 @@ import {
     type DocumentData,
 } from "firebase/firestore";
 import type { StringObject } from "@/types";
-import type { Snapshot, SnapshotDocument, WhereCondition } from "./types";
+import type { OnSnapshotParsers, Snapshot, SnapshotDocument, WhereCondition } from "./types";
 import { localIsraelPhoneFormat } from "../utils";
 import { db } from "./init";
+import type { SetState } from "@/stores/helpers";
 
 // Timestamp
 export const firebaseTimestamp = Timestamp.now;
@@ -289,4 +290,144 @@ const checkConditions = (document: DocumentData, conditions?: WhereCondition[]):
                 return false;
         }
     });
+};
+
+interface ParseSnapshotAsObjectOptions {
+    filterCondition?: (v: any) => boolean;
+    debug?: boolean;
+    debugName?: string;
+}
+
+export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSnapshotAsObjectOptions): OnSnapshotParsers => {
+    return {
+        onFirstTime: (docs) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onFirstTime`, docs);
+            }
+            const object: StringObject = {};
+            docs.forEach((v) => {
+                object[v.id] = v;
+            });
+            setState(object);
+        },
+        onAdd: (docs) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onAdd`, docs);
+            }
+            setState((prev: any) => {
+                const update = { ...prev };
+                docs.forEach((v) => {
+                    update[v.id] = v;
+                });
+                return update;
+            });
+        },
+        onModify: (docs) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onModify`, docs);
+            }
+            setState((prev: any) => {
+                const update = { ...prev };
+                docs.forEach((v) => {
+                    update[v.id] = v;
+                });
+                return update;
+            });
+        },
+        onRemove: (docs) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onRemove`, docs);
+            }
+            setState((prev: any) => {
+                const update = { ...prev };
+                docs.forEach((v) => {
+                    delete update[v.id];
+                });
+                return update;
+            });
+        },
+    };
+};
+
+export const parseSnapshotAsArray = (setState: SetState<any>, options?: ParseSnapshotAsObjectOptions): OnSnapshotParsers => {
+    return {
+        onFirstTime: (docs: any[]) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onFirstTime`, docs);
+            }
+            setState(docs);
+        },
+        onAdd: (docs: any[]) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onAdd`, docs);
+            }
+            setState((prev: any) => [...prev, ...docs]);
+        },
+        onModify: (docs: any[]) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onModify`, docs);
+            }
+            setState((prev: any) => {
+                const newState = [...prev];
+                docs.forEach((doc: any) => {
+                    const index = newState.findIndex((d: any) => d.id === doc.id);
+                    if (index !== -1) {
+                        newState[index] = doc;
+                    }
+                });
+                return newState;
+            });
+        },
+        onRemove: (docs: any[]) => {
+            if (docs.length === 0) {
+                return;
+            }
+            if (options?.filterCondition) {
+                docs = docs.filter(options?.filterCondition);
+            }
+            if (options?.debug) {
+                console.log(`${options?.debugName} onRemove`, docs);
+            }
+            setState((prev: any) => prev.filter((doc: any) => !docs.some((d: any) => d.id === doc.id)));
+        },
+    };
 };

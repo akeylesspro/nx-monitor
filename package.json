@@ -31,6 +31,7 @@
         "pinia-plugin-persistedstate": "^4.5.0",
         "primevue": "^4.3.9",
         "reka-ui": "^2.5.0",
+        "socket.io-client": "^4.8.1",
         "tailwind-merge": "^3.3.1",
         "tailwindcss": "^4.1.13",
         "tailwindcss-primeui": "^0.6.1",

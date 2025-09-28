@@ -1,5 +1,6 @@
 export * from "./utils";
 export * from "./firebase";
+export * from "./socket";
 
 String.prototype.toCapitalCase = function (options): string {
     if (options?.firstLetterOnly) {

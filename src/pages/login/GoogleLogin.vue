@@ -20,7 +20,7 @@ const onClick = async () => {
     <button :disabled="isLoading" @click="onClick" class="w-full p-2 rounded-lg border border-[var(--color-border)]">
         <Loader v-if="isLoading" :size="20" class="h-6" />
         <div v-else class="flex items-center justify-center gap-2">
-            {{ $t("common.loginWithEmail") }}
+            {{ $t("common.loginWith") }}
             <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 256 266" preserveAspectRatio="xMidYMid">
                 <path
                     d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"

@@ -1,12 +1,12 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs));
 }
 
 export const localIsraelPhoneFormat = (internationalNumber: string) => {
-  return internationalNumber.replace("+972", "0");
+    return internationalNumber.replace("+972", "0");
 };
 
 export interface ExpiringStorageOptions {
@@ -47,4 +47,9 @@ export const createExpiringStorage = (options: ExpiringStorageOptions) => {
             localStorage.removeItem(key);
         },
     } as Pick<Storage, "getItem" | "setItem" | "removeItem">;
+};
+
+export const { mode, isLocal } = {
+    mode: import.meta.env.VITE_MODE,
+    isLocal: import.meta.env.VITE_IS_LOCAL === "true",
 };

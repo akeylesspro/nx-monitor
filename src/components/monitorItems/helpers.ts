@@ -1,5 +1,5 @@
 import { ChartUi, ListUi, TableUi, ValueUi } from "@/components";
-import type { ItemData, ItemStatus, ItemValue, MetaItem, Thresholds } from "@/types";
+import type { DataItem, ItemStatus, ItemValue, MetaItem, Thresholds } from "@/types";
 import { getChartData, getListData, getTableData } from "./mockData";
 
 /// return items meta list
@@ -177,8 +177,8 @@ export const getItemComponent = (item: MetaItem) => {
     }
 };
 
-export const getItemProps = (item: MetaItem, itemData: ItemData) => {
-    if (!item || !itemData) {
+export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
+    if (!item || !DataItem) {
         return null;
     }
     const { type, valueKeyRef } = item;
@@ -186,21 +186,21 @@ export const getItemProps = (item: MetaItem, itemData: ItemData) => {
     switch (type) {
         case "value":
             return {
-                value: itemData[valueKey] as number,
+                value: DataItem[valueKey] as number,
                 format: item.format,
             };
         case "chart":
-            const chartData = getChartData(itemData[valueKey] as { label: string; value: number }[]);
+            const chartData = getChartData(DataItem[valueKey] as { label: string; value: number }[]);
             return {
                 value: chartData,
             };
         case "table":
             return {
-                value: itemData[valueKey] as any[],
+                value: DataItem[valueKey] as any[],
             };
         case "list":
             return {
-                value: itemData[valueKey] as string[],
+                value: DataItem[valueKey] as string[],
             };
         default:
             return null;

@@ -34,6 +34,6 @@ export interface MetaItem {
 
 export type ItemValue = number | string | Record<string, any>[] | string[];
 
-export type ItemData = {
+export type DataItem = {
     [key: string]: ItemValue;
 };
