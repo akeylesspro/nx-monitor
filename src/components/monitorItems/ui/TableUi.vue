@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRefs } from "vue";
-import { isLink } from "../helpers";
+import { isHtmlTag, isLink } from "../helpers";
 
 const props = defineProps<{
     value: any[];
@@ -33,6 +33,7 @@ const columns = Object.keys(value.value[0]).map((key) => ({
                         <a v-if="isLink(product[col.field])" class="text-blue-600 underline" :href="product[col.field]" target="_blank">{{
                             product[col.field]
                         }}</a>
+                        <span v-else-if="isHtmlTag(col.field)" v-html="col.field"></span>
                         <span v-else>{{ product[col.field] }}</span>
                     </td>
                 </tr>

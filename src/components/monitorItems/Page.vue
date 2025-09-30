@@ -53,7 +53,7 @@ const processedItems = computed(() => {
 
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 _3xl-grid gap-6 max-h-full">
-        <template v-for="item in processedItems" :key="item.name + Math.random()">
+        <template v-for="item in processedItems" :key="item.name + item.title">
             <Container
                 v-if="item.isValid"
                 :title="item.title"

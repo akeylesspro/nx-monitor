@@ -89,6 +89,11 @@ export const isLink = (value: string) => {
     return String(value).startsWith("http");
 };
 
+export const isHtmlTag = (value: string) => {
+    if (!value) return false;
+    return String(value).startsWith("<") && String(value).endsWith(">");
+};
+
 const parseChartData = (mockData: { label: string; value: number }[] = []) => {
     const chartData = {
         labels: mockData.map((item) => item.label),

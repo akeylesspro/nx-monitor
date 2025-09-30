@@ -6,10 +6,6 @@ const messages = {
     en: {
         common: {
             home: "Home",
-            servers: "Servers",
-            test: "Test",
-            traffic: "Traffic",
-            updated: "Updated",
             phoneNumber: "Phone Number",
             sendCode: "Send Code",
             loginWithPhone: "Login with phone number",
@@ -17,6 +13,12 @@ const messages = {
             login: "Login",
             logout: "Logout",
             verifyCode: "Verify Code",
+            before: "Before",
+            minutes: "Minutes",
+            hours: "Hours",
+            days: "Days",
+            and: "and",
+            lessThanMinute: "Less than minute",
         },
         errors: {
             userNotFound: "User not found",
@@ -27,10 +29,6 @@ const messages = {
     he: {
         common: {
             home: "בית",
-            servers: "שרתים",
-            test: "בדיקה",
-            traffic: "תנועה",
-            updated: "עודכן",
             phoneNumber: "מספר טלפון",
             sendCode: "שלח קוד",
             loginWithPhone: "התחברות עם מספר טלפון",
@@ -38,6 +36,12 @@ const messages = {
             login: "התחברות",
             logout: "התנתקות",
             verifyCode: "אימות קוד",
+            before: "לפני",
+            minutes: "דקות",
+            hours: "שעות",
+            days: "ימים",
+            and: "ו",
+            lessThanMinute: "פחות מדקה",
         },
         errors: {
             userNotFound: "משתמש לא נמצא",
