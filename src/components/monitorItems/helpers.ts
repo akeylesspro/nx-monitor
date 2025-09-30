@@ -147,22 +147,6 @@ const getArrayStatus = (value: ItemValue | undefined, itemType: MetaType, valueT
     }
 };
 
-const getUpdatedStatus = (updatedAt: any, updatedThresholds: Thresholds | undefined): ItemStatus => {
-    if (!updatedThresholds) {
-        return "success";
-    }
-    if (isUpdatedThresholdMet(updatedAt, updatedThresholds?.critical)) {
-        return "critical";
-    }
-    if (isUpdatedThresholdMet(updatedAt, updatedThresholds?.red)) {
-        return "error";
-    }
-    if (isUpdatedThresholdMet(updatedAt, updatedThresholds?.yellow)) {
-        return "warning";
-    }
-    return "success";
-};
-
 const getValueStatus = (value: string | number | undefined, valueThresholds: Thresholds | undefined): ItemStatus => {
     if (!valueThresholds) {
         return "success";
@@ -182,18 +166,12 @@ const getValueStatus = (value: string | number | undefined, valueThresholds: Thr
 export const calculateStatus = (
     value: ItemValue | undefined,
     itemType: MetaType,
-    updatedAt: any,
-    { valueThresholds, updatedThresholds }: { valueThresholds: Thresholds | undefined; updatedThresholds: Thresholds | undefined }
+    { valueThresholds }: { valueThresholds: Thresholds | undefined }
 ): ItemStatus => {
     if (!value) {
         console.error("Value is undefined", value);
         return "error";
     }
-
-    // const updatedStatus = getUpdatedStatus(updatedAt, updatedThresholds);
-    // if (updatedStatus !== "success") {
-    //     return updatedStatus;
-    // }
 
     if (Array.isArray(value)) {
         return getArrayStatus(value, itemType, valueThresholds);

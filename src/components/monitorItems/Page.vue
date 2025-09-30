@@ -29,8 +29,7 @@ const processedItems = computed(() => {
         const itemType = item.type;
         const status =
             item.status ||
-            calculateStatus(dataItem?.[valueKey], itemType, dataItem?.updated, {
-                updatedThresholds: item.updated_thresholds,
+            calculateStatus(dataItem?.[valueKey], itemType, {
                 valueThresholds: item.value_thresholds,
             });
         return {
