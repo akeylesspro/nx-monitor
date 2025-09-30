@@ -12,6 +12,7 @@ const { pageName } = toRefs(props);
 const cacheStore = useCacheStore();
 const { getMetaItems } = cacheStore;
 const { dataItems, metaData } = storeToRefs(cacheStore);
+
 const itemsMetaList = computed(() => getMetaItems(metaData.value, pageName.value));
 const statusPriority = {
     critical: 0,
@@ -26,17 +27,18 @@ const processedItems = computed(() => {
         const dataItem = dataItems.value[item.name];
         const props = getItemProps(item, dataItem);
         const valueKey = item.value_key_ref || "value";
+        const status =
+            item.status ||
+            calculateStatus(dataItem?.[valueKey], {
+                updatedThresholds: item.updated_thresholds,
+                valueThresholds: item.value_thresholds,
+            });
         return {
             ...item,
             component,
             props,
             dataItem,
-            status:
-                item.status ||
-                calculateStatus(dataItem?.[valueKey], {
-                    updatedThresholds: item.updated_thresholds,
-                    valueThresholds: item.value_thresholds,
-                }),
+            status,
             isValid: component && props,
         };
     });
@@ -51,19 +53,20 @@ const processedItems = computed(() => {
 
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 _3xl-grid gap-6 max-h-full">
-        <template v-for="item in processedItems" :key="item.name">
+        <template v-for="item in processedItems" :key="item.name + Math.random()">
             <Container
                 v-if="item.isValid"
                 :title="item.title"
                 :status="item.status"
                 :timestamp="timestampToString(item.dataItem?.updated as any)"
                 :url="item.title_link"
+                :type="item.type"
             >
                 <template #default>
                     <component :is="item.component" v-bind="item.props as any" />
                 </template>
             </Container>
-            <Container v-else :title="item.title" :status="'error'" :timestamp="timestampToString(item.dataItem?.updated as any)">
+            <Container v-else :type="item.type" :title="item.title" :status="'error'" :timestamp="timestampToString(item.dataItem?.updated as any)">
                 <template #default>
                     <ValueUi :value="'error'" />
                 </template>

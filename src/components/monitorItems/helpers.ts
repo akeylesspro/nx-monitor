@@ -48,7 +48,7 @@ export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
 
 export const calculateStatus = (
     value: ItemValue | undefined,
-    { valueThresholds, updatedThresholds }: { valueThresholds?: Thresholds; updatedThresholds?: Thresholds }
+    { valueThresholds, updatedThresholds }: { valueThresholds?: Thresholds; updatedThresholds?: Thresholds },
 ): ItemStatus => {
     if (!value) {
         console.error("Value is undefined", value);

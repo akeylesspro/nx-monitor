@@ -5,8 +5,7 @@ import Layout from "./Layout.vue";
 import { LoginPage, Recaptcha } from "./pages/Login";
 import { useUserStore } from "./stores";
 
-const userStore = useUserStore();
-const { isLoggedIn, token } = storeToRefs(userStore);
+const { isLoggedIn, token } = storeToRefs(useUserStore());
 </script>
 
 <template>

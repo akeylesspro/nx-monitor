@@ -182,134 +182,136 @@ class SocketService {
     }
 
     /// subscribe to collections
-    public subscribeToCollections(config: OnSnapshotConfig[]): () => void {
-        if (config.length === 0) {
-            return () => {};
-        }
-
-        const s = this.getSocketInstance();
-        const collectionsNames = config.map((c) => c.collectionName);
-
-        // Filter out collections that are already subscribed
-        const newCollections = [...new Set(collectionsNames.filter((collectionName) => !this.subscribedCollections.has(collectionName)))];
-
-        if (newCollections.length === 0) {
-            console.log(`All collections already subscribed: ${collectionsNames.join(", ")}`);
-            return () => {};
-        }
-
-        const eventHandlers: Array<{ eventName: string; handler: OnSnapshotCallback }> = [];
-
-        config.forEach((configuration) => {
-            const { collectionName, onAdd, onFirstTime, onModify, onRemove, extraParsers } = configuration;
-
-            // Only process collections that are not already subscribed
-            if (!this.subscribedCollections.has(collectionName)) {
-                // Build a single dispatcher per event that fans out to all handlers (main + extras)
-                const buildDispatcher = (
-                    baseHandler: OnSnapshotCallback | undefined,
-                    extraHandlers: Array<OnSnapshotCallback | undefined> | undefined
-                ): OnSnapshotCallback | null => {
-                    const handlers = [baseHandler, ...(extraHandlers || [])].filter(Boolean) as OnSnapshotCallback[];
-                    if (handlers.length === 0) return null;
-                    const dispatcher: OnSnapshotCallback = (docs: any[]) => {
-                        if (!this.shouldProcessEvent(currentEventName!, docs)) return;
-                        handlers.forEach((h) => h(docs, configuration));
-                    };
-                    return dispatcher;
-                };
-
-                const initialEvent = `initial:${collectionName}`;
-                const addEvent = `add:${collectionName}`;
-                const updateEvent = `update:${collectionName}`;
-                const deleteEvent = `delete:${collectionName}`;
-
-                let currentEventName: string | null = null;
-
-                currentEventName = initialEvent;
-                const initialDispatcher = buildDispatcher(
-                    onFirstTime,
-                    extraParsers?.map((p) => p.onFirstTime)
-                );
-                currentEventName = addEvent;
-                const addDispatcher = buildDispatcher(
-                    onAdd,
-                    extraParsers?.map((p) => p.onAdd)
-                );
-                currentEventName = updateEvent;
-                const updateDispatcher = buildDispatcher(
-                    onModify,
-                    extraParsers?.map((p) => p.onModify)
-                );
-                currentEventName = deleteEvent;
-                const deleteDispatcher = buildDispatcher(
-                    onRemove,
-                    extraParsers?.map((p) => p.onRemove)
-                );
-
-                const attach = (eventName: string, handler: OnSnapshotCallback | null) => {
-                    if (!handler) return;
-                    // Ensure only a single listener exists per event
-                    this.socket!.off(eventName); // remove all previous listeners for this event
-                    this.socket!.on(eventName, handler);
-                    eventHandlers.push({ eventName, handler });
-                };
-
-                attach(initialEvent, initialDispatcher);
-                attach(addEvent, addDispatcher);
-                attach(updateEvent, updateDispatcher);
-                attach(deleteEvent, deleteDispatcher);
-
-                // Mark collection as subscribed and store its config
-                this.subscribedCollections.add(collectionName);
-                this.subscriptionConfigs.set(collectionName, [configuration]);
-            } else {
-                // If already subscribed, just add the new config to existing ones
-                const existingConfigs = this.subscriptionConfigs.get(collectionName) || [];
-                existingConfigs.push(configuration);
-                this.subscriptionConfigs.set(collectionName, existingConfigs);
+    public async subscribeToCollections(config: OnSnapshotConfig[]): Promise<() => void> {
+        return new Promise((resolve, reject) => {
+            if (config.length === 0) {
+                resolve(() => {});
             }
-        });
+            const s = this.getSocketInstance();
+            const collectionsNames = config.map((c) => c.collectionName);
 
-        // Only emit subscription for new collections
-        if (newCollections.length > 0) {
-            s.emit("subscribe_collections", newCollections, (callback: SocketCallbackResponse) => {
-                if (callback.success) {
-                    console.log(`Successfully subscribed to: ${newCollections.join(", ")}`);
+            // Filter out collections that are already subscribed
+            const newCollections = [...new Set(collectionsNames.filter((collectionName) => !this.subscribedCollections.has(collectionName)))];
+
+            if (newCollections.length === 0) {
+                console.log(`All collections already subscribed: ${collectionsNames.join(", ")}`);
+                resolve(() => {});
+            }
+
+            const eventHandlers: Array<{ eventName: string; handler: OnSnapshotCallback }> = [];
+
+            config.forEach((configuration) => {
+                const { collectionName, onAdd, onFirstTime, onModify, onRemove, extraParsers } = configuration;
+
+                // Only process collections that are not already subscribed
+                if (!this.subscribedCollections.has(collectionName)) {
+                    // Build a single dispatcher per event that fans out to all handlers (main + extras)
+                    const buildDispatcher = (
+                        baseHandler: OnSnapshotCallback | undefined,
+                        extraHandlers: Array<OnSnapshotCallback | undefined> | undefined
+                    ): OnSnapshotCallback | null => {
+                        const handlers = [baseHandler, ...(extraHandlers || [])].filter(Boolean) as OnSnapshotCallback[];
+                        if (handlers.length === 0) return null;
+                        const dispatcher: OnSnapshotCallback = (docs: any[]) => {
+                            if (!this.shouldProcessEvent(currentEventName!, docs)) return;
+                            handlers.forEach((h) => h(docs, configuration));
+                        };
+                        return dispatcher;
+                    };
+
+                    const initialEvent = `initial:${collectionName}`;
+                    const addEvent = `add:${collectionName}`;
+                    const updateEvent = `update:${collectionName}`;
+                    const deleteEvent = `delete:${collectionName}`;
+
+                    let currentEventName: string | null = null;
+
+                    currentEventName = initialEvent;
+                    const initialDispatcher = buildDispatcher(
+                        onFirstTime,
+                        extraParsers?.map((p) => p.onFirstTime)
+                    );
+                    currentEventName = addEvent;
+                    const addDispatcher = buildDispatcher(
+                        onAdd,
+                        extraParsers?.map((p) => p.onAdd)
+                    );
+                    currentEventName = updateEvent;
+                    const updateDispatcher = buildDispatcher(
+                        onModify,
+                        extraParsers?.map((p) => p.onModify)
+                    );
+                    currentEventName = deleteEvent;
+                    const deleteDispatcher = buildDispatcher(
+                        onRemove,
+                        extraParsers?.map((p) => p.onRemove)
+                    );
+
+                    const attach = (eventName: string, handler: OnSnapshotCallback | null) => {
+                        if (!handler) return;
+                        // Ensure only a single listener exists per event
+                        this.socket!.off(eventName); // remove all previous listeners for this event
+                        this.socket!.on(eventName, handler);
+                        eventHandlers.push({ eventName, handler });
+                    };
+
+                    attach(initialEvent, initialDispatcher);
+                    attach(addEvent, addDispatcher);
+                    attach(updateEvent, updateDispatcher);
+                    attach(deleteEvent, deleteDispatcher);
+
+                    // Mark collection as subscribed and store its config
+                    this.subscribedCollections.add(collectionName);
+                    this.subscriptionConfigs.set(collectionName, [configuration]);
                 } else {
-                    console.error(`Failed to subscribe to ${newCollections.join(", ")}: ${callback.message}`);
-                    // Remove from tracking if subscription failed
-                    newCollections.forEach((collectionName) => {
+                    // If already subscribed, just add the new config to existing ones
+                    const existingConfigs = this.subscriptionConfigs.get(collectionName) || [];
+                    existingConfigs.push(configuration);
+                    this.subscriptionConfigs.set(collectionName, existingConfigs);
+                }
+            });
+
+            const unsubscribe = () => {
+                console.log(`Cleaning up subscriptions for: ${collectionsNames.join(", ")}`);
+
+                // Remove configs for this specific subscription
+                collectionsNames.forEach((collectionName) => {
+                    const existingConfigs = this.subscriptionConfigs.get(collectionName) || [];
+                    const filteredConfigs = existingConfigs.filter((c) => !config.includes(c));
+
+                    if (filteredConfigs.length === 0) {
+                        // No more configs for this collection, unsubscribe
                         this.subscribedCollections.delete(collectionName);
                         this.subscriptionConfigs.delete(collectionName);
-                    });
-                }
-            });
-        }
+                        s.emit("unsubscribe_collections", [collectionName]);
+                    } else {
+                        // Update with remaining configs
+                        this.subscriptionConfigs.set(collectionName, filteredConfigs);
+                    }
+                });
 
-        return () => {
-            console.log(`Cleaning up subscriptions for: ${collectionsNames.join(", ")}`);
-
-            // Remove configs for this specific subscription
-            collectionsNames.forEach((collectionName) => {
-                const existingConfigs = this.subscriptionConfigs.get(collectionName) || [];
-                const filteredConfigs = existingConfigs.filter((c) => !config.includes(c));
-
-                if (filteredConfigs.length === 0) {
-                    // No more configs for this collection, unsubscribe
-                    this.subscribedCollections.delete(collectionName);
-                    this.subscriptionConfigs.delete(collectionName);
-                    s.emit("unsubscribe_collections", [collectionName]);
-                } else {
-                    // Update with remaining configs
-                    this.subscriptionConfigs.set(collectionName, filteredConfigs);
-                }
-            });
-
-            eventHandlers.forEach((eh) => {
-                s.off(eh.eventName, eh.handler);
-            });
-        };
+                eventHandlers.forEach((eh) => {
+                    s.off(eh.eventName, eh.handler);
+                });
+            };
+            // Only emit subscription for new collections
+            if (newCollections.length > 0) {
+                s.emit("subscribe_collections", newCollections, (callback: SocketCallbackResponse) => {
+                    if (callback.success) {
+                        console.log(`Successfully subscribed to: ${newCollections.join(", ")}`);
+                        resolve(unsubscribe);
+                    } else {
+                        console.error(`Failed to subscribe to ${newCollections.join(", ")}: ${callback.message}`);
+                        // Remove from tracking if subscription failed
+                        newCollections.forEach((collectionName) => {
+                            this.subscribedCollections.delete(collectionName);
+                            this.subscriptionConfigs.delete(collectionName);
+                        });
+                        reject(new Error(callback.message || "Subscription failed"));
+                    }
+                });
+            }
+        });
     }
 
     /// set data

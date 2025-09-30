@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import "./style.css";
 import App from "./App.vue";
-import router from "./router";
+import { initializeRouter } from "./router";
 import PrimeVue from "primevue/config";
 import "chart.js/auto";
 import { createPinia } from "pinia";
@@ -18,7 +18,7 @@ app.use(pinia);
 const { initializeTheme } = useThemeStore();
 initializeTheme();
 const i18n = setup();
-
+export const router = initializeRouter();
 app.use(router);
 app.use(i18n);
 app.use(PrimeVue, {

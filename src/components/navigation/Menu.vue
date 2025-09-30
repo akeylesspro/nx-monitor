@@ -33,8 +33,8 @@ onUnmounted(() => {
         <nav
             :class="
                 cn(
-                    'fixed z-50 inset-y-0  w-48  flex flex-col bg-[var(--color-bg)] border-[var(--color-border)] border-e animate-fadeinright animate-duration-200',
-                    settings.isRtl ? 'right-0' : 'left-0'
+                    'fixed z-50 inset-y-0  w-48  flex flex-col bg-[var(--color-bg)] border-[var(--color-border)] border-e animate-duration-200',
+                    settings.isRtl ? 'right-0 animate-fadeinright' : 'left-0 animate-fadeinleft'
                 )
             "
         >
