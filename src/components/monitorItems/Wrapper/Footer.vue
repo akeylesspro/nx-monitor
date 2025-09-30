@@ -34,11 +34,13 @@ const computeTimePastText = (ts: string | undefined): string => {
     if (diffMs < oneDay) {
         const hours = Math.floor(diffMs / oneHour);
         const minutes = Math.floor((diffMs % oneHour) / oneMinute);
-        return `${beforeText} ${hours} ${hoursText} ${andText} ${minutes} ${minutesText}`;
+        const minutesLabel = minutes > 0 ? `${andText} ${minutes} ${minutesText}` : "";
+        return `${beforeText} ${hours} ${hoursText} ${minutesLabel}`;
     }
     const days = Math.floor(diffMs / oneDay);
     const hours = Math.floor((diffMs % oneDay) / oneHour);
-    return `${beforeText} ${days} ${daysText} ${andText} ${hours} ${hoursText}`;
+    const hoursLabel = hours > 0 ? `${andText} ${hours} ${hoursText}` : "";
+    return `${beforeText} ${days} ${daysText} ${hoursLabel}`;
 };
 
 const updateTimePast = () => {
