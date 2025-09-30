@@ -4,7 +4,6 @@ import { Container, ValueUi } from "@/components";
 import { calculateStatus, getItemComponent, getItemProps } from "./helpers";
 import { storeToRefs } from "pinia";
 import { useCacheStore } from "@/stores";
-import { timestampToString } from "@/helpers";
 const props = defineProps<{
     pageName: string;
 }>();
@@ -27,9 +26,10 @@ const processedItems = computed(() => {
         const dataItem = dataItems.value[item.name];
         const props = getItemProps(item, dataItem);
         const valueKey = item.value_key_ref || "value";
+        const itemType = item.type;
         const status =
             item.status ||
-            calculateStatus(dataItem?.[valueKey], {
+            calculateStatus(dataItem?.[valueKey], itemType, dataItem?.updated, {
                 updatedThresholds: item.updated_thresholds,
                 valueThresholds: item.value_thresholds,
             });
@@ -58,15 +58,23 @@ const processedItems = computed(() => {
                 v-if="item.isValid"
                 :title="item.title"
                 :status="item.status"
-                :timestamp="timestampToString(item.dataItem?.updated as any)"
+                :timestamp="item.dataItem?.updated"
                 :url="item.title_link"
                 :type="item.type"
+                :updatedThreshold="item.updated_thresholds"
             >
                 <template #default>
                     <component :is="item.component" v-bind="item.props as any" />
                 </template>
             </Container>
-            <Container v-else :type="item.type" :title="item.title" :status="'error'" :timestamp="timestampToString(item.dataItem?.updated as any)">
+            <Container
+                v-else
+                :type="item.type"
+                :title="item.title"
+                :status="'error'"
+                :timestamp="item.dataItem?.updated"
+                :updatedThreshold="item.updated_thresholds"
+            >
                 <template #default>
                     <ValueUi :value="'error'" />
                 </template>

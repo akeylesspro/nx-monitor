@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
-import type { ItemStatus, MetaType } from "../../../types";
+import type { ItemStatus, MetaType, Thresholds } from "../../../types";
 import { Title, Footer } from ".";
 import { cn } from "../../../helpers";
 
 const props = defineProps<{
     title: string;
     status: ItemStatus;
-    timestamp?: string;
+    timestamp?: any;
     url?: string;
     type: MetaType;
+    updatedThreshold: Thresholds | undefined;
 }>();
 const { title, status, timestamp, url, type } = toRefs(props);
 
@@ -42,9 +43,9 @@ const classNames = computed(() => {
         class="h-72 border rounded-md px-4 py-2 flex flex-col gap-2 text-black animate-duration-400"
         :class="cn(classNames.bg, classNames.border, type !== 'chart' ? 'animate-flipleft ' : 'animate-fadeindown')"
     >
-        <Title :title="title" :timestamp="timestamp" :url="url" />
+        <Title :title="title" :url="url" />
         <slot />
-        <Footer :timestamp="timestamp" />
+        <Footer :timestamp="timestamp" :updatedThreshold="updatedThreshold" />
     </div>
 </template>
 

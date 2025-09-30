@@ -14,6 +14,7 @@ export interface Title {
 }
 
 export interface Thresholds {
+    column_name?: string;
     yellow?: number | string;
     red?: number | string;
     critical?: number | string;

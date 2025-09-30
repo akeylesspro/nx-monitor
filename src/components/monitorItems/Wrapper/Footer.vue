@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { toRefs, ref, watch, onMounted, onUnmounted } from "vue";
-import { timestampToMillis } from "@/helpers/times";
+import { toRefs, ref, watch, onMounted, onUnmounted, computed } from "vue";
+import { timestampToMillis, timestampToString } from "@/helpers/times";
 import { useI18n } from "vue-i18n";
+import { useSettingsStore } from "@/stores";
+import { storeToRefs } from "pinia";
+import { isUpdatedThresholdMet } from "../helpers";
+import type { Thresholds } from "@/types";
 
 const props = defineProps<{
-    timestamp?: string;
+    timestamp?: any;
+    updatedThreshold: Thresholds | undefined;
 }>();
-const { timestamp } = toRefs(props);
+const { timestamp, updatedThreshold } = toRefs(props);
 const { t, locale } = useI18n();
 const timePast = ref<string>("");
 let intervalId: number | undefined;
+const { userTimeZone } = storeToRefs(useSettingsStore());
 
 const computeTimePastText = (ts: string | undefined): string => {
     if (!ts) return "";
-    const tsMs = timestampToMillis(ts);
+    const tsMs = timestampToMillis(ts, { tz: userTimeZone.value });
     const nowMs = Date.now();
     const diffMs = Math.max(0, nowMs - tsMs);
     const beforeText = t("common.before");
@@ -42,9 +48,8 @@ const computeTimePastText = (ts: string | undefined): string => {
     const hoursLabel = hours > 0 ? `${andText} ${hours} ${hoursText}` : "";
     return `${beforeText} ${days} ${daysText} ${hoursLabel}`;
 };
-
 const updateTimePast = () => {
-    timePast.value = computeTimePastText(timestamp?.value);
+    timePast.value = computeTimePastText(timestampToString(timestamp.value, { tz: userTimeZone.value }));
 };
 
 watch(timestamp, updateTimePast);
@@ -60,11 +65,26 @@ onUnmounted(() => {
         clearInterval(intervalId);
     }
 });
+const textColor = computed(() => {
+    if (!updatedThreshold.value) {
+        return "text-[gray]";
+    }
+    if (
+        isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.critical) ||
+        isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.red)
+    ) {
+        return "text-red-700";
+    }
+    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.yellow)) {
+        return "text-yellow-700";
+    }
+    return "text-[gray]";
+});
 </script>
 
 <template>
-    <div v-if="timestamp" class="w-full flex items-center gap-2 text-sm text-[gray]">
-        <span dir="ltr">{{ timestamp }}</span>
+    <div v-if="timestamp" class="w-full flex items-center gap-2 text-sm" :class="textColor">
+        <span dir="ltr">{{ timestampToString(timestamp, { tz: userTimeZone }) }}</span>
         <span>-</span>
         <span>{{ timePast }}</span>
     </div>
