@@ -7,7 +7,7 @@ String.prototype.toCapitalCase = function (options): string {
     if (options?.firstLetterOnly) {
         return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
     }
-    const splitBy = options?.splitBy || " ";
-    const words = this.split(splitBy);
+    const splitBy = options?.splitBy || "_";
+    const words = this.split(splitBy).filter(Boolean);
     return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
 };

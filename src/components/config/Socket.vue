@@ -3,7 +3,7 @@ import { parseSnapshotAsArray, parseSnapshotAsObject, socketServiceInstance } fr
 import { useCacheStore, useUserStore } from "@/stores";
 import { onMounted, onUnmounted, ref } from "vue";
 
-const { setNxSettings, setSettings, setDataItems, setMetaData, setCacheLoaded } = useCacheStore();
+const { setNxSettings, setSettings, setDataItems, setMetaData, setCacheLoaded, setTranslations } = useCacheStore();
 const userStore = useUserStore();
 const unsubscribe = ref<() => void>();
 onMounted(async () => {
@@ -23,12 +23,16 @@ onMounted(async () => {
                 ...parseSnapshotAsObject(setSettings),
             },
             {
+                collectionName: "nx-translations",
+                ...parseSnapshotAsObject(setTranslations),
+            },
+            {
                 collectionName: "nx-monitor-data",
-                ...parseSnapshotAsObject(setDataItems, { debug: true, debugName: "nx-monitor-data" }),
+                ...parseSnapshotAsObject(setDataItems),
             },
             {
                 collectionName: "nx-monitor-meta",
-                ...parseSnapshotAsArray(setMetaData, { debug: true, debugName: "nx-monitor-meta" }),
+                ...parseSnapshotAsArray(setMetaData),
             },
         ]);
     } catch (error) {
@@ -38,9 +42,8 @@ onMounted(async () => {
     setCacheLoaded(true);
     socketServiceInstance.onConnect(() => {
         socketServiceInstance.onDisconnect(() => {
-            // window.location.reload();
             unsubscribe.value?.();
-            alert("🔴 Socket disconnected");
+            window.location.reload();
         });
     });
 });

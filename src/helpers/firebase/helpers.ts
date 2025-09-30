@@ -292,13 +292,15 @@ const checkConditions = (document: DocumentData, conditions?: WhereCondition[]):
     });
 };
 
-interface ParseSnapshotAsObjectOptions {
+interface ParseSnapshotOptions {
     filterCondition?: (v: any) => boolean;
     debug?: boolean;
     debugName?: string;
+    deleteId?: boolean;
 }
 
-export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSnapshotAsObjectOptions): OnSnapshotParsers => {
+export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSnapshotOptions): OnSnapshotParsers => {
+    const deleteId = options?.deleteId ?? true;
     return {
         onFirstTime: (docs) => {
             if (docs.length === 0) {
@@ -307,13 +309,18 @@ export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSn
             if (options?.filterCondition) {
                 docs = docs.filter(options?.filterCondition);
             }
-            if (options?.debug) {
-                console.log(`${options?.debugName} onFirstTime`, docs);
-            }
+
             const object: StringObject = {};
             docs.forEach((v) => {
-                object[v.id] = v;
+                const id = v.id;
+                if (deleteId) {
+                    delete v.id;
+                }
+                object[id] = v;
             });
+            if (options?.debug) {
+                console.log(`${options?.debugName} onFirstTime`, object);
+            }
             setState(object);
         },
         onAdd: (docs) => {
@@ -323,14 +330,19 @@ export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSn
             if (options?.filterCondition) {
                 docs = docs.filter(options?.filterCondition);
             }
-            if (options?.debug) {
-                console.log(`${options?.debugName} onAdd`, docs);
-            }
+
             setState((prev: any) => {
                 const update = { ...prev };
                 docs.forEach((v) => {
-                    update[v.id] = v;
+                    const id = v.id;
+                    if (deleteId) {
+                        delete v.id;
+                    }
+                    update[id] = v;
                 });
+                if (options?.debug) {
+                    console.log(`${options?.debugName} onAdd`, update);
+                }
                 return update;
             });
         },
@@ -341,14 +353,19 @@ export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSn
             if (options?.filterCondition) {
                 docs = docs.filter(options?.filterCondition);
             }
-            if (options?.debug) {
-                console.log(`${options?.debugName} onModify`, docs);
-            }
+
             setState((prev: any) => {
                 const update = { ...prev };
                 docs.forEach((v) => {
-                    update[v.id] = v;
+                    const id = v.id;
+                    if (deleteId) {
+                        delete v.id;
+                    }
+                    update[id] = v;
                 });
+                if (options?.debug) {
+                    console.log(`${options?.debugName} onModify`, update);
+                }
                 return update;
             });
         },
@@ -356,21 +373,22 @@ export const parseSnapshotAsObject = (setState: SetState<any>, options?: ParseSn
             if (docs.length === 0) {
                 return;
             }
-            if (options?.debug) {
-                console.log(`${options?.debugName} onRemove`, docs);
-            }
+
             setState((prev: any) => {
                 const update = { ...prev };
                 docs.forEach((v) => {
                     delete update[v.id];
                 });
+                if (options?.debug) {
+                    console.log(`${options?.debugName} onRemove`, update);
+                }
                 return update;
             });
         },
     };
 };
 
-export const parseSnapshotAsArray = (setState: SetState<any>, options?: ParseSnapshotAsObjectOptions): OnSnapshotParsers => {
+export const parseSnapshotAsArray = (setState: SetState<any>, options?: ParseSnapshotOptions): OnSnapshotParsers => {
     return {
         onFirstTime: (docs: any[]) => {
             if (docs.length === 0) {

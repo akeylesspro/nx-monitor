@@ -7,7 +7,7 @@ declare module "*.vue" {
 }
 
 declare interface String {
-    toCapitalCase(options?: { firstLetterOnly: boolean; splitBy: string }): string;
+    toCapitalCase(options?: { firstLetterOnly?: boolean; splitBy: string }): string;
 }
 
 interface ImportMetaEnv {
