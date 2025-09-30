@@ -190,10 +190,10 @@ export const calculateStatus = (
         return "error";
     }
 
-    const updatedStatus = getUpdatedStatus(updatedAt, updatedThresholds);
-    if (updatedStatus !== "success") {
-        return updatedStatus;
-    }
+    // const updatedStatus = getUpdatedStatus(updatedAt, updatedThresholds);
+    // if (updatedStatus !== "success") {
+    //     return updatedStatus;
+    // }
 
     if (Array.isArray(value)) {
         return getArrayStatus(value, itemType, valueThresholds);

@@ -40,7 +40,7 @@ const classNames = computed(() => {
 
 <template>
     <div
-        class="h-72 border rounded-md px-4 py-2 flex flex-col gap-2 text-black animate-duration-400"
+        class="h-72 border rounded-md px-3 py-2 flex flex-col gap-2 text-black animate-duration-400"
         :class="cn(classNames.bg, classNames.border, type !== 'chart' ? 'animate-flipleft ' : 'animate-fadeindown')"
     >
         <Title :title="title" :url="url" />
@@ -49,18 +49,4 @@ const classNames = computed(() => {
     </div>
 </template>
 
-<style scoped>
-._critical-blink {
-    animation: criticalBlink 0.6s ease-in-out infinite;
-}
-
-@keyframes criticalBlink {
-    0%,
-    100% {
-        background-color: rgb(254, 226, 226);
-    }
-    50% {
-        background-color: rgb(239 68 68);
-    }
-}
-</style>
+<style scoped></style>

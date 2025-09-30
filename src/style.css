@@ -57,7 +57,6 @@
     --color-secondary: #25deeb;
     --color-hover: #e0e2e4;
     --radius: 0.625rem;
-    
 }
 
 @media (prefers-color-scheme: dark) {
@@ -156,6 +155,20 @@ body {
     }
     to {
         transform: rotate(0deg);
+    }
+}
+
+._critical-blink {
+    animation: criticalBlink 0.6s ease-in-out infinite;
+}
+
+@keyframes criticalBlink {
+    0%,
+    100% {
+        background-color: rgb(254, 226, 226);
+    }
+    50% {
+        background-color: rgb(239 68 68);
     }
 }
 

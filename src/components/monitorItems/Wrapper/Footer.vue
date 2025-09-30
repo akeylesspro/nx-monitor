@@ -67,23 +67,23 @@ onUnmounted(() => {
 });
 const textColor = computed(() => {
     if (!updatedThreshold.value) {
-        return "text-[gray]";
+        return "";
     }
-    if (
-        isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.critical) ||
-        isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.red)
-    ) {
-        return "text-red-700";
+    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.critical)) {
+        return "animate-caret-blink animate-duration-700  bg-red-500 ";
+    }
+    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.red)) {
+        return "bg-red-400 ";
     }
     if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.yellow)) {
-        return "text-yellow-700";
+        return "bg-yellow-400 ";
     }
-    return "text-[gray]";
+    return "";
 });
 </script>
 
 <template>
-    <div v-if="timestamp" class="w-full flex items-center gap-2 text-xs" :class="textColor">
+    <div v-if="timestamp" class="w-full flex items-center gap-2 text-xs rounded-md px-1" :class="textColor">
         <span dir="ltr">{{ timestampToString(timestamp, { tz: userTimeZone }) }}</span>
         <span>-</span>
         <span>{{ timePast }}</span>
