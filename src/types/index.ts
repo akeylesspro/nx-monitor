@@ -8,6 +8,8 @@ export type MetaType = "value" | "list" | "table" | "chart";
 
 export type ItemFormat = "int" | "decimal" | "percent" | "currency" | "string";
 
+export type ThresholdsDirection = "asc" | "desc";
+
 export interface Title {
     title: string;
     url?: string;
@@ -15,8 +17,9 @@ export interface Title {
 
 export interface Thresholds {
     column_name?: string;
-    yellow?: number | string;
-    red?: number | string;
+    direction?: ThresholdsDirection;
+    warning?: number | string;
+    error?: number | string;
     critical?: number | string;
 }
 

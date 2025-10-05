@@ -13,6 +13,7 @@ import {
     type Query,
     type WhereFilterOp,
     type DocumentData,
+    setDoc,
 } from "firebase/firestore";
 import type { StringObject } from "@/types";
 import type { OnSnapshotParsers, Snapshot, SnapshotDocument, WhereCondition } from "./types";
@@ -94,6 +95,17 @@ export const queryDocumentsByConditions = async (collection_path: string, where_
     } catch (error) {
         console.error(`Error querying documents: ${collection_path} - ${JSON.stringify(where_conditions)} `, error);
         return [];
+    }
+};
+
+export const setDocument = async (collection_path: string, doc_id: string, data: DocumentData, merge = true) => {
+    try {
+        const doc_ref = doc(db, collection_path, doc_id);
+        await setDoc(doc_ref, data, { merge });
+        return true;
+    } catch (error) {
+        console.error(`Failed to create document by id: ${doc_id} in collection: ${collection_path}`, { error, data });
+        return false;
     }
 };
 

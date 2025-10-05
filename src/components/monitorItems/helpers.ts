@@ -1,7 +1,7 @@
 import { ChartUi, ListUi, TableUi, ValueUi } from "@/components";
 import { timestampToMillis } from "@/helpers";
 import { useSettingsStore } from "@/stores";
-import type { DataItem, ItemStatus, ItemValue, MetaItem, MetaType, StringObject, Thresholds } from "@/types";
+import type { DataItem, ItemStatus, ItemValue, MetaItem, MetaType, StringObject, Thresholds, ThresholdsDirection } from "@/types";
 import { storeToRefs } from "pinia";
 
 const parseChartData = (chartData: { label: string; value: number }[] = []) => {
@@ -74,7 +74,11 @@ const parseDurationToMillis = (threshold: string): number => {
     return totalSeconds * 1000;
 };
 
-export const isUpdatedThresholdMet = (updatedAt: any, threshold: number | string | undefined): boolean => {
+export const isUpdatedThresholdMet = (
+    updatedAt: any,
+    threshold: number | string | undefined,
+    direction: ThresholdsDirection | undefined = "asc"
+): boolean => {
     const { userTimeZone } = storeToRefs(useSettingsStore());
     if (!threshold || !updatedAt) return false;
     const updatedMs = timestampToMillis(updatedAt, { tz: userTimeZone.value });
@@ -85,15 +89,19 @@ export const isUpdatedThresholdMet = (updatedAt: any, threshold: number | string
     }
     const thresholdMs = parseDurationToMillis(threshold);
     if (!thresholdMs) return false;
-    return ageMs >= thresholdMs;
+    return direction === "asc" ? ageMs >= thresholdMs : ageMs <= thresholdMs;
 };
 
-const isValueThresholdMet = (value: ItemValue | undefined, threshold: number | string | undefined): boolean => {
+const isValueThresholdMet = (
+    value: ItemValue | undefined,
+    threshold: number | string | undefined,
+    direction: ThresholdsDirection | undefined = "asc"
+): boolean => {
     if (!threshold) return false;
     const numericValue = Number(value);
     const isNumeric = !isNaN(numericValue);
     if (typeof threshold === "number") {
-        return isNumeric && numericValue >= threshold;
+        return isNumeric && (direction === "asc" ? numericValue >= threshold : numericValue <= threshold);
     }
 
     return value === threshold;
@@ -103,14 +111,14 @@ const calculateArrayStatus = (array: (string | number)[], valueThresholds: Thres
     let isHasError = false;
     let isHasWarning = false;
     for (const tableValue of array) {
-        if (isValueThresholdMet(tableValue, valueThresholds?.critical)) {
+        if (isValueThresholdMet(tableValue, valueThresholds?.critical, valueThresholds?.direction)) {
             return "critical";
         }
-        if (!isHasError && isValueThresholdMet(tableValue, valueThresholds?.red)) {
+        if (!isHasError && isValueThresholdMet(tableValue, valueThresholds?.error, valueThresholds?.direction)) {
             isHasError = true;
             continue;
         }
-        if (isValueThresholdMet(tableValue, valueThresholds?.yellow)) {
+        if (isValueThresholdMet(tableValue, valueThresholds?.warning, valueThresholds?.direction)) {
             isHasWarning = true;
         }
     }
@@ -151,13 +159,13 @@ const getValueStatus = (value: string | number | undefined, valueThresholds: Thr
     if (!valueThresholds) {
         return "success";
     }
-    if (isValueThresholdMet(value, valueThresholds?.critical)) {
+    if (isValueThresholdMet(value, valueThresholds?.critical, valueThresholds?.direction)) {
         return "critical";
     }
-    if (isValueThresholdMet(value, valueThresholds?.red)) {
+    if (isValueThresholdMet(value, valueThresholds?.error, valueThresholds?.direction)) {
         return "error";
     }
-    if (isValueThresholdMet(value, valueThresholds?.yellow)) {
+    if (isValueThresholdMet(value, valueThresholds?.warning, valueThresholds?.direction)) {
         return "warning";
     }
     return "success";

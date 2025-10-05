@@ -69,13 +69,13 @@ const textColor = computed(() => {
     if (!updatedThreshold.value) {
         return "";
     }
-    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.critical)) {
-        return "animate-caret-blink animate-duration-700  bg-red-500 ";
+    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.critical, updatedThreshold.value.direction)) {
+        return "_critical-blink-footer";
     }
-    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.red)) {
+    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.error, updatedThreshold.value.direction)) {
         return "bg-red-400 ";
     }
-    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.yellow)) {
+    if (isUpdatedThresholdMet(timestamp.value, updatedThreshold.value.warning, updatedThreshold.value.direction)) {
         return "bg-yellow-400 ";
     }
     return "";
