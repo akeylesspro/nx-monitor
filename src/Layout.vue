@@ -13,7 +13,7 @@ let refreshInterval: NodeJS.Timeout | null = null;
 onMounted(() => {
     refreshInterval = setInterval(() => {
         window.location.reload();
-    }, 5 * 60 * 1000); 
+    }, 5 * 60 * 1000);
 });
 
 onUnmounted(() => {
