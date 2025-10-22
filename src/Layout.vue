@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { Config, Loader } from "./components";
 import { MobileHeader } from "./components/Mobile";
@@ -6,6 +7,20 @@ import { Navigation } from "./components/navigation";
 import { useCacheStore } from "./stores";
 
 const { cacheLoaded } = storeToRefs(useCacheStore());
+
+let refreshInterval: NodeJS.Timeout | null = null;
+
+onMounted(() => {
+    refreshInterval = setInterval(() => {
+        window.location.reload();
+    }, 5 * 60 * 1000); 
+});
+
+onUnmounted(() => {
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
+    }
+});
 </script>
 
 <template>
