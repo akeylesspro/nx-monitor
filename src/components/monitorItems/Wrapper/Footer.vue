@@ -113,9 +113,9 @@ const textColor = computed(() => {
 </script>
 
 <template>
-    <div v-if="timestamp" class="text-xs px-1 flex justify-between">
+    <div v-if="timestamp" class="text-xs flex justify-between">
         <ThresholdUi :threshold="updatedThreshold">
-            <div class="flex items-center gap-2 rounded-md" :class="textColor">
+            <div class="flex items-center gap-2 rounded-md px-2 pb-px" :class="textColor">
                 <span dir="ltr">{{ timestampToString(timestamp, { tz: userTimeZone }) }}</span>
                 <span>-</span>
                 <span>{{ timePast }}</span>
