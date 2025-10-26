@@ -34,6 +34,9 @@ const columns = Object.keys(value.value[0]).map((key) => ({
                             product[col.field]
                         }}</a>
                         <span v-else-if="isHtmlTag(col.field)" v-html="col.field"></span>
+                        <span v-else-if="typeof product[col.field] === 'number'" class="font-mono">{{
+                            Number(product[col.field]).toLocaleString("en-US")
+                        }}</span>
                         <span v-else>{{ product[col.field] }}</span>
                     </td>
                 </tr>

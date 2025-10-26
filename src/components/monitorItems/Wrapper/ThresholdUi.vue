@@ -28,15 +28,15 @@ const hasThreshold = computed(() => {
                 </div>
                 <div v-if="threshold?.warning !== undefined" class="flex justify-between gap-3">
                     <span class="text-yellow-300">{{ $t("common.warning") }}:</span>
-                    <span class="font-mono">{{ threshold.warning }}</span>
+                    <span class="font-mono">{{ Number(threshold.warning).toLocaleString("en-US") }}</span>
                 </div>
                 <div v-if="threshold?.error !== undefined" class="flex justify-between gap-3">
                     <span class="text-red-400">{{ $t("common.error") }}:</span>
-                    <span class="font-mono">{{ threshold.error }}</span>
+                    <span class="font-mono">{{ Number(threshold.error).toLocaleString("en-US") }}</span>
                 </div>
                 <div v-if="threshold?.critical !== undefined" class="flex justify-between gap-3">
                     <span class="text-red-600">{{ $t("common.critical") }}:</span>
-                    <span class="font-mono">{{ threshold.critical }}</span>
+                    <span class="font-mono">{{ Number(threshold.critical).toLocaleString("en-US") }}</span>
                 </div>
             </div>
             <div

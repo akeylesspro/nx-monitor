@@ -24,11 +24,17 @@ const formatUi = computed(() => {
 const valueUi = computed(() => {
     switch (format.value) {
         case "int":
-            return Number(value.value).toFixed(0);
+            return Number(Number(value.value).toFixed(0)).toLocaleString("en-US");
         case "decimal":
-            return Number(value.value).toFixed(2);
+            return Number(value.value).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
         default:
-            return typeof value.value === "number" ? value.value.toFixed(0) : String(value.value);
+            if (typeof value.value === "number") {
+                return Number(value.value.toFixed(0)).toLocaleString("en-US");
+            }
+            return String(value.value);
     }
 });
 </script>

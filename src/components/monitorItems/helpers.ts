@@ -189,12 +189,12 @@ export const calculateStatus = (
     return getValueStatus(value, valueThresholds);
 };
 
-export const isLink = (value: string) => {
+export const isLink = (value: string | number) => {
     if (!value) return false;
     return String(value).startsWith("http");
 };
 
-export const isHtmlTag = (value: string) => {
+export const isHtmlTag = (value: string | number) => {
     if (!value) return false;
     return String(value).startsWith("<") && String(value).endsWith(">");
 };
