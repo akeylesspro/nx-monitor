@@ -11,8 +11,10 @@ const props = defineProps<{
     url?: string;
     type: MetaType;
     updatedThreshold: Thresholds | undefined;
+    cron: string | undefined;
+    name: string;
 }>();
-const { title, status, timestamp, url, type } = toRefs(props);
+const { title, status, timestamp, url, type, cron, name } = toRefs(props);
 
 const classNames = computed(() => {
     switch (status.value) {
@@ -45,7 +47,7 @@ const classNames = computed(() => {
     >
         <Title :title="title" :url="url" />
         <slot />
-        <Footer :timestamp="timestamp" :updatedThreshold="updatedThreshold" />
+        <Footer :timestamp="timestamp" :updatedThreshold="updatedThreshold" :cron="cron" :name="name" />
     </div>
 </template>
 

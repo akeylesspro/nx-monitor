@@ -43,6 +43,7 @@ export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
             return {
                 value: DataItem[valueKey] as number,
                 format: item.format,
+                valueThresholds: item.value_thresholds,
             };
         case "chart":
             const chartData = parseChartData(DataItem[valueKey] as { label: string; value: number }[]);

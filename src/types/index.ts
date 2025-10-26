@@ -30,6 +30,7 @@ export interface MetaItem {
     format: ItemFormat;
     title: string;
     title_link?: string;
+    cron?: string;
     value_key_ref?: string;
     value_thresholds?: Thresholds;
     updated_thresholds?: Thresholds;

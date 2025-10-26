@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
-import type { ItemFormat } from "@/types";
+import type { ItemFormat, Thresholds } from "@/types";
+import ThresholdUi from "../Wrapper/ThresholdUi.vue";
 
 const props = defineProps<{
     value: number | string;
     format?: ItemFormat;
+    valueThresholds?: Thresholds;
 }>();
 const { value, format } = toRefs(props);
 
@@ -33,9 +35,11 @@ const valueUi = computed(() => {
 
 <template>
     <div class="text-6xl flex-1 flex items-center justify-center">
-        <div :style="{ direction: formatUi ? 'ltr' : undefined }" class="flex gap-2 font-semibold">
-            <div>{{ valueUi }}</div>
-            <div v-if="formatUi">{{ formatUi }}</div>
-        </div>
+        <ThresholdUi :threshold="valueThresholds">
+            <div :style="{ direction: formatUi ? 'ltr' : undefined }" class="flex gap-2 font-semibold">
+                <div>{{ valueUi }}</div>
+                <div v-if="formatUi">{{ formatUi }}</div>
+            </div>
+        </ThresholdUi>
     </div>
 </template>

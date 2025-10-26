@@ -2,18 +2,25 @@
 import { toRefs, ref, watch, onMounted, onUnmounted, computed } from "vue";
 import { timestampToMillis, timestampToString } from "@/helpers/times";
 import { useI18n } from "vue-i18n";
-import { useSettingsStore } from "@/stores";
+import { useSettingsStore, useUserStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { isUpdatedThresholdMet } from "../helpers";
 import type { Thresholds } from "@/types";
+import axios from "axios";
+import ThresholdUi from "./ThresholdUi.vue";
 
 const props = defineProps<{
     timestamp?: any;
     updatedThreshold: Thresholds | undefined;
+    cron: string | undefined;
+    name: string;
 }>();
-const { timestamp, updatedThreshold } = toRefs(props);
+
+const { timestamp, updatedThreshold, cron, name } = toRefs(props);
 const { t, locale } = useI18n();
 const timePast = ref<string>("");
+const userStore = useUserStore();
+const isLoading = ref(false);
 let intervalId: number | undefined;
 const { userTimeZone } = storeToRefs(useSettingsStore());
 
@@ -65,6 +72,29 @@ onUnmounted(() => {
         clearInterval(intervalId);
     }
 });
+
+const reRunTask = async () => {
+    try {
+        isLoading.value = true;
+        const res = await axios.post(
+            `https://nx-api.info/api/bi/monitor/tasks/run`,
+            {
+                task_name: name.value,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userStore.token}`,
+                },
+            }
+        );
+        console.log("Task re-run response", res.data.data);
+    } catch (error) {
+        console.error("Error re-running task", error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 const textColor = computed(() => {
     if (!updatedThreshold.value) {
         return "";
@@ -83,9 +113,16 @@ const textColor = computed(() => {
 </script>
 
 <template>
-    <div v-if="timestamp" class="w-full flex items-center gap-2 text-xs rounded-md px-1" :class="textColor">
-        <span dir="ltr">{{ timestampToString(timestamp, { tz: userTimeZone }) }}</span>
-        <span>-</span>
-        <span>{{ timePast }}</span>
+    <div v-if="timestamp" class="text-xs px-1 flex justify-between">
+        <ThresholdUi :threshold="updatedThreshold">
+            <div class="flex items-center gap-2 rounded-md" :class="textColor">
+                <span dir="ltr">{{ timestampToString(timestamp, { tz: userTimeZone }) }}</span>
+                <span>-</span>
+                <span>{{ timePast }}</span>
+            </div>
+        </ThresholdUi>
+        <button @click="reRunTask" v-if="cron" class="border border-black px-2 py-1 rounded-sm hover:bg-gray-300" :title="t('common.reRunTask')">
+            <i class="fa-regular fa-rotate-right" :class="isLoading ? 'animate-spin' : ''" />
+        </button>
     </div>
 </template>

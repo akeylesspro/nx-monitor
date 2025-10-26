@@ -61,6 +61,8 @@ const processedItems = computed(() => {
                 :url="item.title_link"
                 :type="item.type"
                 :updatedThreshold="item.updated_thresholds"
+                :cron="item.cron"
+                :name="item.name"
             >
                 <template #default>
                     <component :is="item.component" v-bind="item.props as any" />
@@ -73,6 +75,8 @@ const processedItems = computed(() => {
                 :status="'error'"
                 :timestamp="item.dataItem?.updated"
                 :updatedThreshold="item.updated_thresholds"
+                :cron="item.cron"
+                :name="item.name"
             >
                 <template #default>
                     <ValueUi :value="'error'" />
