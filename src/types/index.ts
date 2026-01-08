@@ -1,3 +1,5 @@
+import type { Timestamp } from "firebase/firestore";
+
 export interface StringObject<T = any> {
     [key: string]: T;
 }
@@ -23,6 +25,30 @@ export interface Thresholds {
     critical?: number | string;
 }
 
+export interface NotificationItem {
+    to?: string[];
+    template?: string;
+    last_sent_timestamp?: Timestamp;
+    interval_seconds?: number;
+}
+
+export type NotificationChannel = "sms" | "email";
+
+export type NotificationChannels = Partial<Record<NotificationChannel, NotificationItem>>;
+
+export type NotificationStatus = Exclude<ItemStatus, "info" | "success">;
+
+export type StatusNotificationChannels = Partial<Record<NotificationStatus, NotificationChannels>>;
+
+export type NotificationTriggeredBy = "on_value_thresholds_options" | "on_updated_thresholds_options";
+
+export type NotificationsOptions = Partial<Record<NotificationTriggeredBy, StatusNotificationChannels>>;
+
+export interface Notification {
+    value?: NotificationOptions;
+    updated?: NotificationOptions;
+}
+
 export interface MetaItem {
     name: string;
     type: MetaType;
@@ -35,6 +61,7 @@ export interface MetaItem {
     value_thresholds?: Thresholds;
     updated_thresholds?: Thresholds;
     status?: ItemStatus;
+    notification?: Notification;
 }
 
 export type ItemValue = number | string | Record<string, any>[] | string[];

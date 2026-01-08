@@ -63,16 +63,44 @@ export const getItemProps = (item: MetaItem, DataItem: DataItem) => {
     }
 };
 
-const parseDurationToMillis = (threshold: string): number => {
-    const match = /^\s*(\d{2}):(\d{2}):(\d{2}):(\d{2})\s*$/.exec(String(threshold));
-    if (!match) return 0;
-    const days = Number(match[1]);
-    const hours = Number(match[2]);
-    const minutes = Number(match[3]);
-    const seconds = Number(match[4]);
-    if ([days, hours, minutes, seconds].some((n) => Number.isNaN(n))) return 0;
-    const totalSeconds = ((days * 24 + hours) * 60 + minutes) * 60 + seconds;
-    return totalSeconds * 1000;
+const parseDurationToMillis = (input: string): number => {
+    if (!isDurationFormat(input)) {
+        return 0;
+    }
+    const parts = input.split(":");
+    const numbers = parts.map((p) => Number(p));
+    if (numbers.some((n) => !Number.isFinite(n) || Number.isNaN(n) || n < 0)) {
+        return 0;
+    }
+
+    let days = 0;
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+
+    if (numbers.length === 4) {
+        [days, hours, minutes, seconds] = numbers;
+    } else if (numbers.length === 3) {
+        [hours, minutes, seconds] = numbers;
+    } else if (numbers.length === 2) {
+        [minutes, seconds] = numbers;
+    } else {
+        [seconds] = numbers;
+    }
+
+    const total_seconds = ((days * 24 + hours) * 60 + minutes) * 60 + seconds;
+    return total_seconds * 1000;
+};
+
+const isDurationFormat = (input: string): boolean => {
+    if (typeof input !== "string" || !input.trim()) {
+        return false;
+    }
+    const parts = input.split(":");
+    if (parts.length < 1 || parts.length > 4) {
+        return false;
+    }
+    return parts.every((part) => /^\d{1,2}$/.test(part));
 };
 
 export const isUpdatedThresholdMet = (
@@ -99,7 +127,10 @@ const isValueThresholdMet = (
     direction: ThresholdsDirection | undefined = "asc"
 ): boolean => {
     if (!threshold) return false;
-    const numericValue = Number(value);
+    let numericValue = Number(value);
+    if (typeof value === "string" && isDurationFormat(value)) {
+        numericValue = parseDurationToMillis(value) / 1000;
+    }
     const isNumeric = !isNaN(numericValue);
     if (typeof threshold === "number") {
         return isNumeric && (direction === "asc" ? numericValue >= threshold : numericValue <= threshold);
