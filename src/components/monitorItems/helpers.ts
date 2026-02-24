@@ -208,7 +208,7 @@ export const calculateStatus = (
     itemType: MetaType,
     { valueThresholds }: { valueThresholds: Thresholds | undefined }
 ): ItemStatus => {
-    if (!value) {
+    if (typeof value === "undefined") {
         console.error("Value is undefined", value);
         return "error";
     }
