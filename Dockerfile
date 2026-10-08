@@ -2,9 +2,15 @@ FROM node:22-alpine AS build
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
+# A lockfile created on Windows omits optional native packages for other
+# platforms (https://github.com/npm/cli/issues/4828). Install the Alpine
+# binaries Vite needs, using the versions already locked for rollup and esbuild.
+RUN npm install \
+    && npm install --no-save --include=optional \
+        "$(node -p "const v=require('./node_modules/rollup/package.json').optionalDependencies['@rollup/rollup-linux-x64-musl']; '@rollup/rollup-linux-x64-musl@'+v")" \
+        "$(node -p "const v=require('./node_modules/esbuild/package.json').optionalDependencies['@esbuild/linux-x64']; '@esbuild/linux-x64@'+v")"
 
 COPY . .
 

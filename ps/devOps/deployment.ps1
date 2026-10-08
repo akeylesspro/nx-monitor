@@ -2,6 +2,14 @@ param (
     [string]$v,
     [string]$c
 )
+
+function Exit-OnFailure {
+    param([string]$Step)
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "$Step failed with exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
+}
 $versionFilePath = "./package.json"
 $versionJson = Get-Content $versionFilePath | ConvertFrom-Json
 if ($v) {
@@ -39,15 +47,21 @@ else {
 }
 # ***** set kubectl context to cuurent project *****
 gcloud container clusters get-credentials nx-apps --zone europe-west1
+Exit-OnFailure "Fetching cluster credentials"
 # Build the Docker image with the new version
 docker build --build-arg ENV=$enviroment -t gcr.io/${currentProject}/${imageName}:${version} .
+Exit-OnFailure "Docker build"
 # Tag the new image as 'latest'
 docker tag gcr.io/${currentProject}/${imageName}:${version} gcr.io/${currentProject}/${imageName}:latest
+Exit-OnFailure "Docker tag"
 # Push both tags to Google Container Registry
 docker push gcr.io/${currentProject}/${imageName}:${version}
+Exit-OnFailure "Docker push ($version)"
 docker push gcr.io/${currentProject}/${imageName}:latest
+Exit-OnFailure "Docker push (latest)"
 # Restart the Kubernetes deployment to ensure it's using the latest image
 kubectl rollout restart deployment/${deploymentName}
+Exit-OnFailure "Restart deployment"
 # Check the status of the pods to ensure the deployment was successful
 kubectl get pods
 
